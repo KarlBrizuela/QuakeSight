@@ -1,0 +1,182 @@
+[
+  {
+    "Name ": "Caloocan",
+    "Type": "city (HUC)",
+    "Population (2020)": 1661584,
+    "Population (2015)": 1583978,
+    "Annual Population Growth Rate (2015‑2020)": 0.0101,
+    "Area (2013), in km2": 55.8,
+    "Density (2020), per km2": 29777,
+    "Brgy count": 188
+  },
+  {
+    "Name ": "Las Piñas",
+    "Type": "city (HUC)",
+    "Population (2020)": 606293,
+    "Population (2015)": 588894,
+    "Annual Population Growth Rate (2015‑2020)": 0.0061,
+    "Area (2013), in km2": 32.69,
+    "Density (2020), per km2": 18547,
+    "Brgy count": 20
+  },
+  {
+    "Name ": "Makati",
+    "Type": "city (HUC)",
+    "Population (2020)": 629616,
+    "Population (2015)": 582602,
+    "Annual Population Growth Rate (2015‑2020)": 0.0165,
+    "Area (2013), in km2": 21.57,
+    "Density (2020), per km2": 29189,
+    "Brgy count": 33
+  },
+  {
+    "Name ": "Malabon",
+    "Type": "city (HUC)",
+    "Population (2020)": 380522,
+    "Population (2015)": 365525,
+    "Annual Population Growth Rate (2015‑2020)": 0.0085,
+    "Area (2013), in km2": 15.71,
+    "Density (2020), per km2": 24222,
+    "Brgy count": 21
+  },
+  {
+    "Name ": "Mandaluyong",
+    "Type": "city (HUC)",
+    "Population (2020)": 425758,
+    "Population (2015)": 386276,
+    "Annual Population Growth Rate (2015‑2020)": 0.0207,
+    "Area (2013), in km2": 9.29,
+    "Density (2020), per km2": 45830,
+    "Brgy count": 27
+  },
+  {
+    "Name ": "Manila",
+    "Type": "city (HUC), capital, regional center",
+    "Population (2020)": 1846513,
+    "Population (2015)": 1780148,
+    "Annual Population Growth Rate (2015‑2020)": 0.0077,
+    "Area (2013), in km2": 24.98,
+    "Density (2020), per km2": 73920,
+    "Brgy count": 897
+  },
+  {
+    "Name ": "Marikina",
+    "Type": "city (HUC)",
+    "Population (2020)": 456059,
+    "Population (2015)": 450741,
+    "Annual Population Growth Rate (2015‑2020)": 0.0025,
+    "Area (2013), in km2": 21.52,
+    "Density (2020), per km2": 21192,
+    "Brgy count": 16
+  },
+  {
+    "Name ": "Muntinlupa",
+    "Type": "city (HUC)",
+    "Population (2020)": 543445,
+    "Population (2015)": 504509,
+    "Annual Population Growth Rate (2015‑2020)": 0.0158,
+    "Area (2013), in km2": 39.75,
+    "Density (2020), per km2": 13672,
+    "Brgy count": 9
+  },
+  {
+    "Name ": "Navotas",
+    "Type": "city (HUC)",
+    "Population (2020)": 247543,
+    "Population (2015)": 249463,
+    "Annual Population Growth Rate (2015‑2020)": -0.0016,
+    "Area (2013), in km2": 8.94,
+    "Density (2020), per km2": 27689,
+    "Brgy count": 18
+  },
+  {
+    "Name ": "Parañaque",
+    "Type": "city (HUC)",
+    "Population (2020)": 689992,
+    "Population (2015)": 665822,
+    "Annual Population Growth Rate (2015‑2020)": 0.0075,
+    "Area (2013), in km2": 46.57,
+    "Density (2020), per km2": 14816,
+    "Brgy count": 16
+  },
+  {
+    "Name ": "Pasay",
+    "Type": "city (HUC)",
+    "Population (2020)": 440656,
+    "Population (2015)": 416522,
+    "Annual Population Growth Rate (2015‑2020)": 0.0119,
+    "Area (2013), in km2": 13.97,
+    "Density (2020), per km2": 31543,
+    "Brgy count": 201
+  },
+  {
+    "Name ": "Pasig",
+    "Type": "city (HUC)",
+    "Population (2020)": 803159,
+    "Population (2015)": 755300,
+    "Annual Population Growth Rate (2015‑2020)": 0.013,
+    "Area (2013), in km2": 48.46,
+    "Density (2020), per km2": 16574,
+    "Brgy count": 30
+  },
+  {
+    "Name ": "Pateros",
+    "Type": "mun",
+    "Population (2020)": 65227,
+    "Population (2015)": 63840,
+    "Annual Population Growth Rate (2015‑2020)": 0.0045,
+    "Area (2013), in km2": 10.4,
+    "Density (2020), per km2": 6272,
+    "Brgy count": 10
+  },
+  {
+    "Name ": "Quezon City",
+    "Type": "city (HUC)",
+    "Population (2020)": 2960048,
+    "Population (2015)": 2936116,
+    "Annual Population Growth Rate (2015‑2020)": 0.0017,
+    "Area (2013), in km2": 171.71,
+    "Density (2020), per km2": 17239,
+    "Brgy count": 142
+  },
+  {
+    "Name ": "San Juan",
+    "Type": "city (HUC)",
+    "Population (2020)": 126347,
+    "Population (2015)": 122180,
+    "Annual Population Growth Rate (2015‑2020)": 0.0071,
+    "Area (2013), in km2": 5.95,
+    "Density (2020), per km2": 21235,
+    "Brgy count": 21
+  },
+  {
+    "Name ": "Taguig",
+    "Type": "city (HUC)",
+    "Population (2020)": 886722,
+    "Population (2015)": 804915,
+    "Annual Population Growth Rate (2015‑2020)": 0.0206,
+    "Area (2013), in km2": 45.21,
+    "Density (2020), per km2": 19613,
+    "Brgy count": 28
+  },
+  {
+    "Name ": "Valenzuela",
+    "Type": "city (HUC)",
+    "Population (2020)": 714978,
+    "Population (2015)": 620422,
+    "Annual Population Growth Rate (2015‑2020)": 0.0303,
+    "Area (2013), in km2": 47.02,
+    "Density (2020), per km2": 15206,
+    "Brgy count": 33
+  },
+  {
+    "Name ": "National Capital Region Total",
+    "Type": "13,484,462",
+    "Population (2020)": 12877253,
+    "Population (2015)": 0.0097,
+    "Annual Population Growth Rate (2015‑2020)": 619.54,
+    "Area (2013), in km2": 21765,
+    "Density (2020), per km2": 1710,
+    "Brgy count": ""
+  }
+]
