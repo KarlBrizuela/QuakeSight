@@ -111,7 +111,7 @@ function Prediction() {
             }
         }
     }, []);
-    const [philippineRegions, setPhilippineRegions] = useState({});
+    const [philippineRegions, setPhilippineRegions] = useState(null);
     const [allCities, setAllCities] = useState([]);
     const [usgsData, setUsgsData] = useState(null);
     const [loadingData, setLoadingData] = useState(true);
@@ -1512,20 +1512,15 @@ function Prediction() {
     };
 
     const handleCitySelect = async (cityName) => {
-        const selectedCityData = allCities.find(city => city.name === cityName);
-        if (!selectedCityData) return;
-
         setSelectedCity(cityName);
-        setLoading(true);
-
         try {
-            console.log(`🔄 Fetching completely fresh data for ${cityName}, ${selectedRegion}...`);
+            if (!cityName) {
+                setPrediction(null);
+                return;
+            }
+            console.log(`🌆 Selected city: ${cityName} in region ${selectedRegion}`);
             
-            // Small delay to ensure state updates complete
-            await new Promise(resolve => setTimeout(resolve, 100));
-            
-            // Fetch fresh data with forceRefresh = true to bypass all caches
-            const [historicalData, faultProximityData] = await Promise.all([
+            const [historicalData, faultProximity] = await Promise.all([
                 fetchHistoricalEarthquakes(
                     selectedCityData.latitude, 
                     selectedCityData.longitude, 
@@ -1571,21 +1566,24 @@ function Prediction() {
                 dataSource: "Live USGS + PHIVOLCS APIs"
             };
 
+            const riskAssessment = calculateEarthquakeRisk(updatedCityData);
+            
+            setPrediction({
+                ...riskAssessment,
+                city: updatedCityData,
+                timestamp: new Date().toLocaleString(),
+                recommendations: generateRecommendations(riskAssessment.riskLevel, updatedCityData),
+                usgsData: usgsData
+            });
+            
+            // Add a small delay before hiding the loading indicator
             setTimeout(() => {
-                const riskAssessment = calculateEarthquakeRisk(updatedCityData);
-                
-                setPrediction({
-                    ...riskAssessment,
-                    city: updatedCityData,
-                    timestamp: new Date().toLocaleString(),
-                    recommendations: generateRecommendations(riskAssessment.riskLevel, updatedCityData),
-                    usgsData: usgsData
-                });
                 setLoading(false);
             }, 1500);
         } catch (error) {
             console.error("Error in city selection:", error);
             setLoading(false);
+            setPrediction(null);
         }
     };
 
@@ -1716,7 +1714,7 @@ function Prediction() {
                                             disabled={loadingData}
                                         >
                                             <option value="">Select Region</option>
-                                            {Object.keys(philippineRegions).map(region => (
+                                            {philippineRegions && Object.keys(philippineRegions).map(region => (
                                                 <option key={region} value={region}>{region}</option>
                                             ))}
                                         </select>
@@ -1732,10 +1730,10 @@ function Prediction() {
                                             className="form-select"
                                             value={selectedCity}
                                             onChange={(e) => handleCitySelect(e.target.value)}
-                                            disabled={!selectedRegion || loadingData}
+                                            disabled={!selectedRegion || loadingData || !philippineRegions}
                                         >
                                             <option value="">Select City/Municipality</option>
-                                            {selectedRegion && philippineRegions[selectedRegion]?.map(city => (
+                                            {selectedRegion && philippineRegions && philippineRegions[selectedRegion]?.map(city => (
                                                 <option key={city.name} value={city.name}>{city.name}</option>
                                             ))}
                                         </select>
@@ -1756,6 +1754,93 @@ function Prediction() {
                                             <option value="5 Years">5 Years</option>
                                             <option value="10 Years">10 Years</option>
                                         </select>
+                                        <button
+                                            className="btn btn-primary mt-3 w-100"
+                                            disabled={!selectedRegion || !selectedCity || !selectedYear || loadingData}
+                                            onClick={async () => {
+                                                setLoading(true);
+                                                try {
+                                                    const selectedCityData = philippineRegions[selectedRegion]?.find(city => city.name === selectedCity);
+                                                    if (!selectedCityData) {
+                                                        setPrediction({ error: 'City data not found.' });
+                                                        setLoading(false);
+                                                        return;
+                                                    }
+
+                                                    // Fetch fresh data with forceRefresh = true to bypass all caches
+                                                    const [historicalData, faultProximityData] = await Promise.all([
+                                                        fetchHistoricalEarthquakes(
+                                                            selectedCityData.latitude,
+                                                            selectedCityData.longitude,
+                                                            selectedCity,
+                                                            selectedRegion,
+                                                            true
+                                                        ),
+                                                        calculateFaultProximity(
+                                                            selectedRegion,
+                                                            selectedCity,
+                                                            selectedCityData.latitude,
+                                                            selectedCityData.longitude,
+                                                            true
+                                                        )
+                                                    ]);
+
+                                                    // Get population density data
+                                                    const populationDensityData = getPopulationDensityFromJSON(selectedCity, selectedRegion);
+
+                                                    // Prepare updated city data with all sources
+                                                    const updatedCityData = {
+                                                        ...selectedCityData,
+                                                        maxMagnitude: historicalData.maxMagnitude,
+                                                        historicalQuakes: historicalData.earthquakeCount,
+                                                        faultProximity: faultProximityData?.distance || 25.0,
+                                                        soilRiskScore: selectedCityData.soilRiskScore || 0.5,
+                                                        buildingAgeScore: selectedCityData.buildingAgeScore || 0.5,
+                                                        populationDensity: populationDensityData?.populationDensity || 0,
+                                                        tsunamiRisk: selectedCityData.isCoastal ? 0.8 : 0.2
+                                                    };
+
+                                                    // Calculate years for prediction
+                                                    const yearValue = selectedYear === '5 Years' ? 5 :
+                                                                     selectedYear === '10 Years' ? 10 : 0;
+
+                                                    // Prepare features for ML model
+                                                    const features = [
+                                                        updatedCityData.faultProximity,
+                                                        updatedCityData.historicalQuakes,
+                                                        updatedCityData.maxMagnitude,
+                                                        updatedCityData.soilRiskScore,
+                                                        updatedCityData.buildingAgeScore,
+                                                        updatedCityData.populationDensity,
+                                                        updatedCityData.tsunamiRisk
+                                                    ];
+
+                                                    // Get risk prediction
+                                                    const risk = await predictEarthquakeRisk(features, yearValue || 5);
+
+                                                    // Calculate comprehensive risk assessment
+                                                    const riskAssessment = calculateEarthquakeRisk(updatedCityData);
+
+                                                    setPrediction({
+                                                        ...riskAssessment,
+                                                        region: selectedRegion,
+                                                        city: selectedCity,
+                                                        years: selectedYear,
+                                                        predictedRisk: risk,
+                                                        features: features,
+                                                        timestamp: new Date().toLocaleString(),
+                                                        recommendations: generateRecommendations(riskAssessment.riskLevel, updatedCityData)
+                                                    });
+                                                } catch (error) {
+                                                    console.error("Error during prediction:", error);
+                                                    setPrediction({ error: 'Failed to calculate risk prediction.' });
+                                                } finally {
+                                                    setLoading(false);
+                                                }
+                                            }}
+                                        >
+                                            Predict Risk
+                                        </button>
                                     </div>
                                 </div>
 
