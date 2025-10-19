@@ -76,6 +76,7 @@ import PopulationDensityData from "../Data/PopulationDensity.json"; // Import yo
 import { savePredictionToDatabase } from '../firebase/predictionService';
 import { testFirebaseConnection } from '../firebase/testConnection';
 
+
 function Prediction() {
     const [selectedRegion, setSelectedRegion] = useState("");
     const [selectedCity, setSelectedCity] = useState("");
@@ -2324,6 +2325,7 @@ function Prediction() {
                     </div>
                 </div>
             </div>
+            
         </>
     );
 }
