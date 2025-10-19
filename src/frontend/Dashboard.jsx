@@ -1,5 +1,19 @@
 import React, { useState, useEffect } from "react";
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+
+// Disable default Leaflet markers
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: '',
+  iconUrl: '',
+  shadowUrl: '',
+  iconSize: [0, 0],
+  iconAnchor: [0, 0],
+});
 
 function Dashboard() {
     const [earthquakes, setEarthquakes] = useState([]);
@@ -9,15 +23,79 @@ function Dashboard() {
     const [loading, setLoading] = useState(true);
     const [selectedEarthquake, setSelectedEarthquake] = useState(null);
     const [lastUpdate, setLastUpdate] = useState(new Date());
+    const [mapCenter, setMapCenter] = useState([12.8797, 121.7740]);
+    const [mapZoom, setMapZoom] = useState(6);
 
-    // Risk level determination and color coding - UPDATED THRESHOLDS
+    // Risk level determination and color coding
     const getRiskLevel = (magnitude) => {
         if (magnitude >= 5.0) return { level: 'High Risk', color: '#dc2626', textColor: 'text-danger' };
         if (magnitude >= 4.0) return { level: 'Medium Risk', color: '#f59e0b', textColor: 'text-warning' };
         return { level: 'Low Risk', color: '#16a34a', textColor: 'text-success' };
     };
 
-    // Get risk statistics for the legend - UPDATED TO MATCH getRiskLevel
+    // Create custom earthquake icons - IMPROVED VERSIONS
+    const createCustomIcon = (magnitude, color) => {
+        const size = Math.min(30 + (magnitude * 3), 50); // Size based on magnitude
+        const strokeWidth = magnitude >= 5.0 ? 3 : 2;
+        
+        let svgContent = '';
+        
+        if (magnitude >= 5.0) {
+            // High risk - concentric circles with waves
+            svgContent = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+                    <circle cx="${size/2}" cy="${size/2}" r="${size/2 - 2}" fill="${color}" stroke="#fff" stroke-width="${strokeWidth}"/>
+                    <circle cx="${size/2}" cy="${size/2}" r="${size/4}" fill="none" stroke="#fff" stroke-width="1.5"/>
+                    <text x="${size/2}" y="${size/2 + 1}" text-anchor="middle" fill="white" font-size="10" font-weight="bold">${magnitude.toFixed(1)}</text>
+                </svg>
+            `;
+        } else if (magnitude >= 4.0) {
+            // Medium risk - circle with seismic lines
+            svgContent = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+                    <circle cx="${size/2}" cy="${size/2}" r="${size/2 - 2}" fill="${color}" stroke="#fff" stroke-width="${strokeWidth}"/>
+                    <path d="M${size/4},${size/2} L${size*3/4},${size/2}" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/>
+                    <path d="M${size/2},${size/4} L${size/2},${size*3/4}" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/>
+                    <text x="${size/2}" y="${size/2 + 1}" text-anchor="middle" fill="white" font-size="9" font-weight="bold">${magnitude.toFixed(1)}</text>
+                </svg>
+            `;
+        } else {
+            // Low risk - simple circle
+            svgContent = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+                    <circle cx="${size/2}" cy="${size/2}" r="${size/2 - 2}" fill="${color}" stroke="#fff" stroke-width="${strokeWidth}"/>
+                    <text x="${size/2}" y="${size/2 + 1}" text-anchor="middle" fill="white" font-size="8" font-weight="bold">${magnitude.toFixed(1)}</text>
+                </svg>
+            `;
+        }
+
+        return new L.Icon({
+            iconUrl: `data:image/svg+xml;utf8,${encodeURIComponent(svgContent)}`,
+            iconSize: [size, size],
+            iconAnchor: [size/2, size/2],
+            popupAnchor: [0, -size/2],
+            className: 'custom-earthquake-marker'
+        });
+    };
+
+    // Choose which icon style to use
+    const getEarthquakeIcon = (magnitude, color) => {
+        return createCustomIcon(magnitude, color); // Using concentric circles style
+    };
+
+    // Safe place formatter
+    const formatPlace = (place) => {
+        if (!place) return "Unknown Location";
+        const parts = place.split(', ');
+        return parts.length > 1 ? parts.slice(-2).join(', ') : place;
+    };
+
+    // Safe region getter
+    const getSafeRegion = (quake) => {
+        return quake.properties?.region || "Unknown Region";
+    };
+
+    // Get risk statistics for the legend
     const getRiskStatistics = () => {
         const earthquakesToAnalyze = selectedRegion === "all" ? earthquakes : filteredEarthquakes;
         
@@ -28,7 +106,7 @@ function Dashboard() {
         };
 
         earthquakesToAnalyze.forEach(quake => {
-            const magnitude = quake.properties.mag;
+            const magnitude = quake.properties?.mag || 0;
             if (magnitude >= 5.0) riskCounts.high++;
             else if (magnitude >= 4.0) riskCounts.medium++;
             else riskCounts.low++;
@@ -61,19 +139,17 @@ function Dashboard() {
     const fetchEarthquakeData = async () => {
         try {
             setLoading(true);
-            // Using USGS Earthquake API for Philippines region
             const response = await fetch(
                 'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2024-01-01&latitude=12.8797&longitude=121.7740&maxradiuskm=1000&minmagnitude=2.5'
             );
             const data = await response.json();
             
-            // Process the data and determine regions
             const uniqueRegions = new Set();
             const processedFeatures = data.features.map(quake => {
-                const region = getRegionFromCoordinates(
-                    quake.geometry.coordinates[1],
-                    quake.geometry.coordinates[0]
-                );
+                const lat = quake.geometry?.coordinates?.[1] || 0;
+                const lng = quake.geometry?.coordinates?.[0] || 0;
+                
+                const region = getRegionFromCoordinates(lat, lng);
                 if (region !== "Unknown Region") {
                     uniqueRegions.add(region);
                 }
@@ -81,7 +157,8 @@ function Dashboard() {
                     ...quake,
                     properties: {
                         ...quake.properties,
-                        region
+                        region,
+                        place: quake.properties?.place || "Unknown Location near Philippines"
                     }
                 };
             });
@@ -96,7 +173,6 @@ function Dashboard() {
     };
 
     const getRegionFromCoordinates = (lat, lng) => {
-        // Simplified region determination based on coordinates
         if (lat >= 14.0 && lat <= 15.0 && lng >= 120.0 && lng <= 121.5) return "National Capital Region";
         if (lat >= 16.0 && lat <= 18.0 && lng >= 120.0 && lng <= 122.0) return "Ilocos Region";
         if (lat >= 16.0 && lat <= 18.0 && lng >= 121.0 && lng <= 123.0) return "Cagayan Valley";
@@ -118,78 +194,37 @@ function Dashboard() {
     const filterEarthquakesByRegion = () => {
         if (selectedRegion === "all") {
             setFilteredEarthquakes(earthquakes);
+            setMapCenter([12.8797, 121.7740]);
+            setMapZoom(6);
         } else {
             const filtered = earthquakes.filter(quake => {
-                const region = getRegionFromCoordinates(
-                    quake.geometry.coordinates[1],
-                    quake.geometry.coordinates[0]
-                );
+                const lat = quake.geometry?.coordinates?.[1] || 0;
+                const lng = quake.geometry?.coordinates?.[0] || 0;
+                const region = getRegionFromCoordinates(lat, lng);
                 return region === selectedRegion;
             });
             setFilteredEarthquakes(filtered);
+            
+            if (regionCoordinates[selectedRegion]) {
+                setMapCenter([regionCoordinates[selectedRegion].lat, regionCoordinates[selectedRegion].lng]);
+                setMapZoom(8);
+            }
         }
+        setSelectedEarthquake(null);
     };
 
-    // Generate map markers based on current earthquakes
-    const generateMapMarkers = () => {
-        const earthquakesToShow = selectedRegion === "all" ? earthquakes : filteredEarthquakes;
-        
-        return earthquakesToShow.map(quake => {
-            const risk = getRiskLevel(quake.properties.mag);
-            return `&marker=${quake.geometry.coordinates[1]},${quake.geometry.coordinates[0]}`;
-        }).join('');
-    };
-
-    // Generate map URL with dynamic markers
-    const getMapUrl = () => {
-        const baseUrl = "https://www.openstreetmap.org/export/embed.html";
-        
-        if (selectedEarthquake) {
-            // Show single earthquake with detailed view
-            return `${baseUrl}?bbox=${
-                selectedEarthquake.geometry.coordinates[0] - 1
-            },${
-                selectedEarthquake.geometry.coordinates[1] - 1
-            },${
-                selectedEarthquake.geometry.coordinates[0] + 1
-            },${
-                selectedEarthquake.geometry.coordinates[1] + 1
-            }&layer=mapnik&marker=${
-                selectedEarthquake.geometry.coordinates[1]
-            },${
-                selectedEarthquake.geometry.coordinates[0]
-            }`;
-        } else if (selectedRegion !== "all" && regionCoordinates[selectedRegion]) {
-            // Show region with all earthquakes in that region
-            const region = regionCoordinates[selectedRegion];
-            const markers = generateMapMarkers();
-            return `${baseUrl}?bbox=${
-                region.lng - 1
-            },${
-                region.lat - 1
-            },${
-                region.lng + 1
-            },${
-                region.lat + 1
-            }&layer=mapnik${markers}`;
-        } else {
-            // Show all Philippines with all earthquakes
-            const markers = generateMapMarkers();
-            return `${baseUrl}?bbox=116.0,4.0,128.0,20.0&layer=mapnik${markers}`;
-        }
+    const getEarthquakesToDisplay = () => {
+        return selectedRegion === "all" ? earthquakes : filteredEarthquakes;
     };
 
     useEffect(() => {
-        // Fetch data immediately when component mounts
         fetchEarthquakeData();
 
-        // Set up auto-refresh every 5 minutes
         const refreshInterval = setInterval(() => {
             fetchEarthquakeData();
             setLastUpdate(new Date());
-        }, 5 * 60 * 1000); // 5 minutes in milliseconds
+        }, 5 * 60 * 1000);
 
-        // Cleanup interval on component unmount
         return () => clearInterval(refreshInterval);
     }, []);
 
@@ -198,6 +233,7 @@ function Dashboard() {
     }, [selectedRegion, earthquakes]);
 
     const riskStatistics = getRiskStatistics();
+    const earthquakesToDisplay = getEarthquakesToDisplay();
 
     return (
         <>
@@ -213,10 +249,7 @@ function Dashboard() {
                                 <select
                                     className="form-select w-auto"
                                     value={selectedRegion}
-                                    onChange={(e) => {
-                                        setSelectedRegion(e.target.value);
-                                        setSelectedEarthquake(null); // Clear selected earthquake when changing regions
-                                    }}
+                                    onChange={(e) => setSelectedRegion(e.target.value)}
                                 >
                                     <option value="all">All Regions</option>
                                     {regions.map(region => (
@@ -254,13 +287,15 @@ function Dashboard() {
                                             <div className="d-flex justify-content-between align-items-center mb-3">
                                                 <h5 className="card-title mb-0">
                                                     {selectedEarthquake 
-                                                        ? `Earthquake Location: ${selectedEarthquake.properties.place}`
-                                                        : "Earthquake Map"
+                                                        ? `Earthquake Location: ${formatPlace(selectedEarthquake.properties?.place)}`
+                                                        : selectedRegion === "all" 
+                                                            ? "Philippines Earthquake Map" 
+                                                            : `Earthquake Map - ${selectedRegion}`
                                                     }
                                                 </h5>
                                                 
                                                 {/* Dynamic Legend with Magnitude Ranges */}
-                                                <div className="legend">
+                                                <div className="legend d-none d-md-block">
                                                     <div className="d-flex gap-3">
                                                         <div className="d-flex align-items-center">
                                                             <div 
@@ -324,16 +359,51 @@ function Dashboard() {
                                             </div>
 
                                             <div style={{ height: '500px', width: '100%', position: 'relative' }}>
-                                                <iframe
-                                                    title="Earthquake Map"
-                                                    width="100%"
-                                                    height="100%"
-                                                    frameBorder="0"
-                                                    scrolling="no"
-                                                    marginHeight="0"
-                                                    marginWidth="0"
-                                                    src={getMapUrl()}
-                                                />
+                                                <MapContainer 
+                                                    center={mapCenter} 
+                                                    zoom={mapZoom} 
+                                                    style={{ height: '100%', width: '100%' }}
+                                                    className="rounded"
+                                                >
+                                                    <TileLayer
+                                                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                                    />
+                                                    {earthquakesToDisplay.map((quake, index) => {
+                                                        const magnitude = quake.properties?.mag || 0;
+                                                        const risk = getRiskLevel(magnitude);
+                                                        const lat = quake.geometry?.coordinates?.[1] || 0;
+                                                        const lng = quake.geometry?.coordinates?.[0] || 0;
+                                                        const customIcon = getEarthquakeIcon(magnitude, risk.color);
+                                                        
+                                                        return (
+                                                            <Marker
+                                                                key={quake.id || index}
+                                                                position={[lat, lng]}
+                                                                icon={customIcon}
+                                                                eventHandlers={{
+                                                                    click: () => {
+                                                                        setSelectedEarthquake(quake);
+                                                                    },
+                                                                }}
+                                                            >
+                                                                <Popup>
+                                                                    <div className="text-center">
+                                                                        <h6 className="mb-2">Earthquake Details</h6>
+                                                                        <p className="mb-1"><strong>Magnitude:</strong> {magnitude}</p>
+                                                                        <p className="mb-1"><strong>Location:</strong> {formatPlace(quake.properties?.place)}</p>
+                                                                        <p className="mb-1"><strong>Region:</strong> {getSafeRegion(quake)}</p>
+                                                                        <p className="mb-1"><strong>Depth:</strong> {quake.geometry?.coordinates?.[2] || 0} km</p>
+                                                                        <p className="mb-1"><strong>Time:</strong> {new Date(quake.properties?.time || Date.now()).toLocaleString()}</p>
+                                                                        <div className={`badge ${risk.textColor}`}>
+                                                                            {risk.level}
+                                                                        </div>
+                                                                    </div>
+                                                                </Popup>
+                                                            </Marker>
+                                                        );
+                                                    })}
+                                                </MapContainer>
                                                 
                                                 {/* Legend for mobile view */}
                                                 <div className="d-md-none mt-2">
@@ -392,7 +462,7 @@ function Dashboard() {
                                                 </div>
                                             </div>
 
-                                            {/* Additional Information Section - ADDED CONTENT */}
+                                            {/* Additional Information Section */}
                                             <div className="mt-4">
                                                 <div className="row">
                                                     <div className="col-md-6">
@@ -459,14 +529,28 @@ function Dashboard() {
                                             </div>
 
                                             {selectedEarthquake && (
-                                                <div className="mt-3">
-                                                    <div className={`alert ${getRiskLevel(selectedEarthquake.properties.mag).textColor}`}>
-                                                        <strong>Risk Level:</strong> {getRiskLevel(selectedEarthquake.properties.mag).level}
+                                                <div className="mt-3 p-3 bg-light rounded">
+                                                    <h6>Selected Earthquake Details</h6>
+                                                    <div className={`alert ${getRiskLevel(selectedEarthquake.properties?.mag || 0).textColor} mb-3`}>
+                                                        <strong>Risk Level:</strong> {getRiskLevel(selectedEarthquake.properties?.mag || 0).level}
                                                     </div>
-                                                    <p><strong>Magnitude:</strong> {selectedEarthquake.properties.mag}</p>
-                                                    <p><strong>Depth:</strong> {selectedEarthquake.geometry.coordinates[2]} km</p>
-                                                    <p><strong>Region:</strong> {selectedEarthquake.properties.region}</p>
-                                                    <p><strong>Time:</strong> {new Date(selectedEarthquake.properties.time).toLocaleString()}</p>
+                                                    <div className="row">
+                                                        <div className="col-md-6">
+                                                            <p><strong>Magnitude:</strong> {selectedEarthquake.properties?.mag || "N/A"}</p>
+                                                            <p><strong>Depth:</strong> {selectedEarthquake.geometry?.coordinates?.[2] || "N/A"} km</p>
+                                                        </div>
+                                                        <div className="col-md-6">
+                                                            <p><strong>Region:</strong> {getSafeRegion(selectedEarthquake)}</p>
+                                                            <p><strong>Time:</strong> {new Date(selectedEarthquake.properties?.time || Date.now()).toLocaleString()}</p>
+                                                        </div>
+                                                    </div>
+                                                    <p><strong>Location:</strong> {formatPlace(selectedEarthquake.properties?.place)}</p>
+                                                    <button 
+                                                        className="btn btn-sm btn-outline-secondary"
+                                                        onClick={() => setSelectedEarthquake(null)}
+                                                    >
+                                                        Clear Selection
+                                                    </button>
                                                 </div>
                                             )}
                                         </div>
@@ -478,6 +562,9 @@ function Dashboard() {
                                             <h5 className="card-title">
                                                 Recent Earthquakes
                                                 {selectedRegion !== "all" && ` in ${selectedRegion}`}
+                                                <span className="badge bg-primary ms-2">
+                                                    {earthquakesToDisplay.length}
+                                                </span>
                                             </h5>
                                             
                                             {/* Risk Summary */}
@@ -509,42 +596,50 @@ function Dashboard() {
                                                 </div>
                                             </div>
 
+                                            {/* Earthquake List Table - KEPT INTACT */}
                                             <div className="list-group" style={{ maxHeight: '500px', overflowY: 'auto' }}>
-                                                {filteredEarthquakes.map((quake, index) => {
-                                                    const risk = getRiskLevel(quake.properties.mag);
-                                                    return (
-                                                        <button
-                                                            key={quake.id || index}
-                                                            className={`list-group-item list-group-item-action ${
-                                                                selectedEarthquake?.id === quake.id ? 'active' : ''
-                                                            }`}
-                                                            onClick={() => setSelectedEarthquake(quake)}
-                                                        >
-                                                            <div className="d-flex justify-content-between align-items-start">
-                                                                <div>
-                                                                    <h6 className="mb-1">
-                                                                        <span 
-                                                                            className="badge me-2"
-                                                                            style={{ 
-                                                                                backgroundColor: risk.color,
-                                                                                color: 'white'
-                                                                            }}
-                                                                        >
-                                                                            M{quake.properties.mag}
-                                                                        </span>
-                                                                        {quake.properties.place}
-                                                                    </h6>
-                                                                    <p className="mb-1 small text-muted">
-                                                                        {quake.properties.region}
-                                                                    </p>
-                                                                    <small className="text-muted">
-                                                                        {new Date(quake.properties.time).toLocaleString()}
-                                                                    </small>
+                                                {earthquakesToDisplay.length === 0 ? (
+                                                    <div className="text-center p-3 text-muted">
+                                                        No earthquakes found for the selected region.
+                                                    </div>
+                                                ) : (
+                                                    earthquakesToDisplay.map((quake, index) => {
+                                                        const magnitude = quake.properties?.mag || 0;
+                                                        const risk = getRiskLevel(magnitude);
+                                                        return (
+                                                            <button
+                                                                key={quake.id || index}
+                                                                className={`list-group-item list-group-item-action ${
+                                                                    selectedEarthquake?.id === quake.id ? 'active' : ''
+                                                                }`}
+                                                                onClick={() => setSelectedEarthquake(quake)}
+                                                            >
+                                                                <div className="d-flex justify-content-between align-items-start">
+                                                                    <div className="flex-grow-1">
+                                                                        <h6 className="mb-1">
+                                                                            <span 
+                                                                                className="badge me-2"
+                                                                                style={{ 
+                                                                                    backgroundColor: risk.color,
+                                                                                    color: 'white'
+                                                                                }}
+                                                                            >
+                                                                                M{magnitude}
+                                                                            </span>
+                                                                            {formatPlace(quake.properties?.place)}
+                                                                        </h6>
+                                                                        <p className="mb-1 small text-muted">
+                                                                            {getSafeRegion(quake)}
+                                                                        </p>
+                                                                        <small className="text-muted">
+                                                                            {new Date(quake.properties?.time || Date.now()).toLocaleString()}
+                                                                        </small>
+                                                                    </div>
                                                                 </div>
-                                                            </div>
-                                                        </button>
-                                                    );
-                                                })}
+                                                            </button>
+                                                        );
+                                                    })
+                                                )}
                                             </div>
                                         </div>
                                     </div>
@@ -554,6 +649,7 @@ function Dashboard() {
                     </div>
                 </div>
             </div>
+            <Footer/>
         </>
     );
 }

@@ -170,7 +170,7 @@
     "Brgy count": 33
   },
   {
-    "Name": "National Capital Region Total",
+    "Name": "National Capital Region ",
     "Type": "13,484,462",
     "Population (2020)": 12877253,
     "Population (2015)": 0.0097,
@@ -15703,5 +15703,1117 @@
     "City count": "â€“",
     "Mun count": "â€“",
     "Brgy count": 66
+  },
+   {
+    "Name": "Boac",
+    "Type": "municipality, capital",
+    "Population (2020)": 57283,
+    "Population (2015)": 54730,
+    "Annual Population Growth Rate (2015-2020)": 0.96,
+    "Area (2013), in km2": 212.70,
+    "Density (2020), per km2": 269,
+    "Brgy count": 61
+  },
+   {
+    "Name": "Buenavista",
+    "Type": "municipality",
+    "Population (2020)": 26043,
+    "Population (2015)": 23988,
+    "Annual Population Growth Rate (2015-2020)": 1.75,
+    "Area (2013), in km2": 81.25,
+    "Density (2020), per km2": 321,
+    "Brgy count": 15
+  },
+  {
+    "Name": "Gasan",
+    "Type": "municipality",
+    "Population (2020)": 36197,
+    "Population (2015)": 34828,
+    "Annual Population Growth Rate (2015-2020)": 0.82,
+    "Area (2013), in km2": 100.88,
+    "Density (2020), per km2": 359,
+    "Brgy count": 25
+  },
+   {
+    "Name": "Mogpog",
+    "Type": "municipality",
+    "Population (2020)": 34516,
+    "Population (2015)": 34043,
+    "Annual Population Growth Rate (2015-2020)": 0.29,
+    "Area (2013), in km2": 108.06,
+    "Density (2020), per km2": 319,
+    "Brgy count": 37
+  },
+  {
+    "Name": "Santa Cruz",
+    "Type": "municipality",
+    "Population (2020)": 54692,
+    "Population (2015)": 56408,
+    "Annual Population Growth Rate (2015-2020)": -0.65,
+    "Area (2013), in km2": 270.77,
+    "Density (2020), per km2": 202,
+    "Brgy count": 55
+  },
+   {
+    "Name": "Torrijos",
+    "Type": "municipality",
+    "Population (2020)": 30476,
+    "Population (2015)": 30524,
+    "Annual Population Growth Rate (2015-2020)": -0.03,
+    "Area (2013), in km2":178.92,
+    "Density (2020), per km2": 170,
+    "Brgy count": 25
+  },
+  {
+    "Name": "Marinduque",
+    "Type": "city (HUC), capital",
+    "Population (2020)": 239207,
+    "Population (2015)": 234521,
+    "Annual Population Growth Rate (2015â€‘2020)": 0.42,
+    "Area (2013), in km2": 952.58,
+    "Density (2020), per km2": 251,
+    "City count": "â€“",
+    "Mun count": "â€“",
+    "Brgy count": 218
+  },
+  {
+    "Name": "Buenavista",
+    "Type": "municipality",
+    "Population (2020)": 52899,
+    "Population (2015)": 50437,
+    "Annual Population Growth Rate (2015-2020)": 1.01,
+    "Area (2013), in km2":115.60,
+    "Density (2020), per km2": 458,
+    "Brgy count": 36
+  },
+   {
+    "Name": "Jordan",
+    "Type": "municipality, capital",
+    "Population (2020)": 39566,
+    "Population (2015)": 36096,
+    "Annual Population Growth Rate (2015-2020)": 1.95,
+    "Area (2013), in km2":126.11,
+    "Density (2020), per km2": 314,
+    "Brgy count": 14
+  },
+   {
+    "Name": "Nueva Valencia",
+    "Type": "municipality",
+    "Population (2020)": 42771,
+    "Population (2015)": 39810,
+    "Annual Population Growth Rate (2015-2020)": 1.52,
+    "Area (2013), in km2":137.12,
+    "Density (2020), per km2": 312,
+    "Brgy count": 22
+  },
+ {
+    "Name": "San Lorenzo",
+    "Type": "municipality",
+    "Population (2020)": 29444,
+    "Population (2015)": 26112,
+    "Annual Population Growth Rate (2015-2020)": 2.56,
+    "Area (2013), in km2":106.23,
+    "Density (2020), per km2": 277,
+    "Brgy count": 12
+  },
+  {
+    "Name": "Sibunag",
+    "Type": "municipality",
+    "Population (2020)": 23162,
+    "Population (2015)": 22158,
+    "Annual Population Growth Rate (2015-2020)": 0.94,
+    "Area (2013), in km2":126.81,
+    "Density (2020), per km2": 183,
+    "Brgy count": 14
+  },
+ {
+    "Name": "Guimaras",
+    "Type": "",
+    "Population (2020)": 187842,
+    "Population (2015)": 174613,
+    "Annual Population Growth Rate (2015â€‘2020)": 1.55,
+    "Area (2013), in km2": 611.87,
+    "Density (2020), per km2": 307,
+    "City count": "â€“",
+    "Mun count": "â€“",
+    "Brgy count": 98
+  },
+
+  {
+    "Name": "Enrique Villanueva",
+    "Type": "municipality",
+    "Population (2020)": 6790,
+    "Population (2015)": 6104,
+    "Annual Population Growth Rate (2015-2020)": 2.27,
+    "Area (2013), in km2":28.60,
+    "Density (2020), per km2": 237,
+    "Brgy count": 14
+  },
+  {
+    "Name": "Larena",
+    "Type": "municipality",
+    "Population (2020)": 14454,
+    "Population (2015)": 13847,
+    "Annual Population Growth Rate (2015-2020)": 0.91,
+    "Area (2013), in km2":49.81,
+    "Density (2020), per km2": 290,
+    "Brgy count": 23
+  },
+  {
+    "Name": "Lazi",
+    "Type": "municipality",
+    "Population (2020)": 22488,
+    "Population (2015)": 20490,
+    "Annual Population Growth Rate (2015-2020)": 1.98,
+    "Area (2013), in km2":70.64,
+    "Density (2020), per km2": 318,
+    "Brgy count": 18
+  },
+   {
+    "Name": "Maria",
+    "Type": "municipality",
+    "Population (2020)": 14385,
+    "Population (2015)": 13828,
+    "Annual Population Growth Rate (2015-2020)": 0.83,
+    "Area (2013), in km2":53.37,
+    "Density (2020), per km2": 270,
+    "Brgy count": 22
+  },
+  {
+    "Name": "San Juan",
+    "Type": "municipality",
+    "Population (2020)": 16363,
+    "Population (2015)": 14854,
+    "Annual Population Growth Rate (2015-2020)": 2.06,
+    "Area (2013), in km2":44.37,
+    "Density (2020), per km2": 369,
+    "Brgy count": 15
+  },
+  {
+    "Name": "Siquijor",
+    "Type": "municipality, capital",
+    "Population (2020)": 28915,
+    "Population (2015)": 26861,
+    "Annual Population Growth Rate (2015-2020)": 1.56,
+    "Area (2013), in km2":90.70,
+    "Density (2020), per km2": 319,
+    "Brgy count": 42
+  },
+  {
+    "Name": "Almeria",
+    "Type": "municipality",
+    "Population (2020)": 17954,
+    "Population (2015)": 16951,
+    "Annual Population Growth Rate (2015-2020)": 1.22,
+    "Area (2013), in km2":57.46,
+    "Density (2020), per km2": 312,
+    "Brgy count": 13
+  },
+   {
+    "Name": "Biliran",
+    "Type": "municipality",
+    "Population (2020)": 179312,
+    "Population (2015)": 171612,
+    "Annual Population Growth Rate (2015-2020)": 0.93,
+    "Area (2013), in km2":536.01,
+    "Density (2020), per km2": 335,
+    "Brgy count": 132
+  },
+  {
+    "Name": "Cabucgayan",
+    "Type": "municipality",
+    "Population (2020)": 21542,
+    "Population (2015)": 20788,
+    "Annual Population Growth Rate (2015-2020)": 0.75,
+    "Area (2013), in km2":54.19,
+    "Density (2020), per km2": 398,
+    "Brgy count": 13
+  },
+  {
+    "Name": "Caibiran",
+    "Type": "municipality",
+    "Population (2020)": 24167,
+    "Population (2015)": 22524,
+    "Annual Population Growth Rate (2015-2020)": 1.49,
+    "Area (2013), in km2":83.55,
+    "Density (2020), per km2": 289,
+    "Brgy count": 17
+  },
+  {
+    "Name": "Culaba",
+    "Type": "municipality",
+    "Population (2020)": 12972,
+    "Population (2015)": 12325,
+    "Annual Population Growth Rate (2015-2020)": 1.08,
+    "Area (2013), in km2":73.42,
+    "Density (2020), per km2": 177,
+    "Brgy count": 17
+  },
+  {
+    "Name": "Kawayan",
+    "Type": "municipality",
+    "Population (2020)": 20455,
+    "Population (2015)": 20291,
+    "Annual Population Growth Rate (2015-2020)": 0.17,
+    "Area (2013), in km2":61.02,
+    "Density (2020), per km2": 335,
+    "Brgy count": 20
+  },
+  {
+    "Name": "Maripipi",
+    "Type": "municipality",
+    "Population (2020)": 6373,
+    "Population (2015)": 7159,
+    "Annual Population Growth Rate (2015-2020)": -2.42,
+    "Area (2013), in km2":27.83,
+    "Density (2020), per km2": 229,
+    "Brgy count": 15
+  },
+   {
+    "Name": "Naval",
+    "Type": "municipality, capital",
+    "Population (2020)": 58187,
+    "Population (2015)": 54692,
+    "Annual Population Growth Rate (2015-2020)": 1.31,
+    "Area (2013), in km2":108.24,
+    "Density (2020), per km2": 538,
+    "Brgy count": 26
+  },
+
+
+  {
+    "Name": "Abuyog",
+    "Type": "municipality",
+    "Population (2020)": 61216,
+    "Population (2015)": 59571,
+    "Annual Population Growth Rate (2015‑2020)": 0.0058,
+    "Area (2013), in km2": 688.25,
+    "Density (2020), per km2": 89,
+    "Brgy count": 63
+  },
+  {
+    "Name": "Alangalang",
+    "Type": "municipality",
+    "Population (2020)": 57185,
+    "Population (2015)": 55235,
+    "Annual Population Growth Rate (2015‑2020)": 0.0073,
+    "Area (2013), in km2": 150.54,
+    "Density (2020), per km2": 380,
+    "Brgy count": 54
+  },
+  {
+    "Name": "Albuera",
+    "Type": "municipality",
+    "Population (2020)": 47151,
+    "Population (2015)": 46332,
+    "Annual Population Growth Rate (2015‑2020)": 0.0037,
+    "Area (2013), in km2": 303.35,
+    "Density (2020), per km2": 155,
+    "Brgy count": 16
+  },
+  {
+    "Name": "Babatngon",
+    "Type": "municipality",
+    "Population (2020)": 28823,
+    "Population (2015)": 27797,
+    "Annual Population Growth Rate (2015‑2020)": 0.0077,
+    "Area (2013), in km2": 115.18,
+    "Density (2020), per km2": 250,
+    "Brgy count": 25
+  },
+  {
+    "Name": "Barugo",
+    "Type": "municipality",
+    "Population (2020)": 34497,
+    "Population (2015)": 32745,
+    "Annual Population Growth Rate (2015‑2020)": 0.011,
+    "Area (2013), in km2": 84.62,
+    "Density (2020), per km2": 408,
+    "Brgy count": 37
+  },
+  {
+    "Name": "Bato",
+    "Type": "municipality",
+    "Population (2020)": 38505,
+    "Population (2015)": 38356,
+    "Annual Population Growth Rate (2015‑2020)": 0.0008,
+    "Area (2013), in km2": 72.45,
+    "Density (2020), per km2": 531,
+    "Brgy count": 32
+  },
+  {
+    "Name": "Baybay",
+    "Type": "city (CC)",
+    "Population (2020)": 111848,
+    "Population (2015)": 109432,
+    "Annual Population Growth Rate (2015‑2020)": 0.0046,
+    "Area (2013), in km2": 459.34,
+    "Density (2020), per km2": 243,
+    "Brgy count": 92
+  },
+  {
+    "Name": "Burauen",
+    "Type": "municipality",
+    "Population (2020)": 52511,
+    "Population (2015)": 52732,
+    "Annual Population Growth Rate (2015‑2020)": -0.0009,
+    "Area (2013), in km2": 265.33,
+    "Density (2020), per km2": 198,
+    "Brgy count": 77
+  },
+  {
+    "Name": "Calubian",
+    "Type": "municipality",
+    "Population (2020)": 31646,
+    "Population (2015)": 31228,
+    "Annual Population Growth Rate (2015‑2020)": 0.0028,
+    "Area (2013), in km2": 100.95,
+    "Density (2020), per km2": 313,
+    "Brgy count": 53
+  },
+  {
+    "Name": "Capoocan",
+    "Type": "municipality",
+    "Population (2020)": 33721,
+    "Population (2015)": 33617,
+    "Annual Population Growth Rate (2015‑2020)": 0.0007,
+    "Area (2013), in km2": 185.4,
+    "Density (2020), per km2": 182,
+    "Brgy count": 21
+  },
+  {
+    "Name": "Carigara",
+    "Type": "municipality",
+    "Population (2020)": 54656,
+    "Population (2015)": 51345,
+    "Annual Population Growth Rate (2015‑2020)": 0.0132,
+    "Area (2013), in km2": 117.86,
+    "Density (2020), per km2": 464,
+    "Brgy count": 49
+  },
+  {
+    "Name": "Dagami",
+    "Type": "municipality",
+    "Population (2020)": 36178,
+    "Population (2015)": 35147,
+    "Annual Population Growth Rate (2015‑2020)": 0.0061,
+    "Area (2013), in km2": 161.65,
+    "Density (2020), per km2": 224,
+    "Brgy count": 65
+  },
+  {
+    "Name": "Dulag",
+    "Type": "municipality",
+    "Population (2020)": 48992,
+    "Population (2015)": 47300,
+    "Annual Population Growth Rate (2015‑2020)": 0.0074,
+    "Area (2013), in km2": 110.7,
+    "Density (2020), per km2": 443,
+    "Brgy count": 45
+  },
+  {
+    "Name": "Hilongos",
+    "Type": "municipality",
+    "Population (2020)": 64514,
+    "Population (2015)": 63431,
+    "Annual Population Growth Rate (2015‑2020)": 0.0036,
+    "Area (2013), in km2": 192.92,
+    "Density (2020), per km2": 334,
+    "Brgy count": 51
+  },
+  {
+    "Name": "Hindang",
+    "Type": "municipality",
+    "Population (2020)": 20849,
+    "Population (2015)": 20924,
+    "Annual Population Growth Rate (2015‑2020)": -0.0008,
+    "Area (2013), in km2": 57.66,
+    "Density (2020), per km2": 362,
+    "Brgy count": 20
+  },
+  {
+    "Name": "Inopacan",
+    "Type": "municipality",
+    "Population (2020)": 21389,
+    "Population (2015)": 20550,
+    "Annual Population Growth Rate (2015‑2020)": 0.0085,
+    "Area (2013), in km2": 109.11,
+    "Density (2020), per km2": 196,
+    "Brgy count": 20
+  },
+  {
+    "Name": "Isabel",
+    "Type": "municipality",
+    "Population (2020)": 46781,
+    "Population (2015)": 46915,
+    "Annual Population Growth Rate (2015‑2020)": -0.0006,
+    "Area (2013), in km2": 64.01,
+    "Density (2020), per km2": 731,
+    "Brgy count": 24
+  },
+  {
+    "Name": "Jaro",
+    "Type": "municipality",
+    "Population (2020)": 43758,
+    "Population (2015)": 43199,
+    "Annual Population Growth Rate (2015‑2020)": 0.0027,
+    "Area (2013), in km2": 207.19,
+    "Density (2020), per km2": 211,
+    "Brgy count": 46
+  },
+  {
+    "Name": "Javier",
+    "Type": "municipality",
+    "Population (2020)": 26658,
+    "Population (2015)": 25379,
+    "Annual Population Growth Rate (2015‑2020)": 0.0104,
+    "Area (2013), in km2": 152.7,
+    "Density (2020), per km2": 175,
+    "Brgy count": 28
+  },
+  {
+    "Name": "Julita",
+    "Type": "municipality",
+    "Population (2020)": 15598,
+    "Population (2015)": 15114,
+    "Annual Population Growth Rate (2015‑2020)": 0.0067,
+    "Area (2013), in km2": 53.3,
+    "Density (2020), per km2": 293,
+    "Brgy count": 26
+  },
+  {
+    "Name": "Kananga",
+    "Type": "municipality",
+    "Population (2020)": 59696,
+    "Population (2015)": 56575,
+    "Annual Population Growth Rate (2015‑2020)": 0.0114,
+    "Area (2013), in km2": 144.2,
+    "Density (2020), per km2": 414,
+    "Brgy count": 23
+  },
+  {
+    "Name": "La Paz",
+    "Type": "municipality",
+    "Population (2020)": 19174,
+    "Population (2015)": 19998,
+    "Annual Population Growth Rate (2015‑2020)": -0.0088,
+    "Area (2013), in km2": 72.7,
+    "Density (2020), per km2": 264,
+    "Brgy count": 35
+  },
+  {
+    "Name": "Leyte",
+    "Type": "municipality",
+    "Population (2020)": 40397,
+    "Population (2015)": 40639,
+    "Annual Population Growth Rate (2015‑2020)": -0.0013,
+    "Area (2013), in km2": 181.26,
+    "Density (2020), per km2": 223,
+    "Brgy count": 30
+  },
+  {
+    "Name": "MacArthur",
+    "Type": "municipality",
+    "Population (2020)": 21578,
+    "Population (2015)": 21211,
+    "Annual Population Growth Rate (2015‑2020)": 0.0036,
+    "Area (2013), in km2": 57.57,
+    "Density (2020), per km2": 375,
+    "Brgy count": 31
+  },
+  {
+    "Name": "Mahaplag",
+    "Type": "municipality",
+    "Population (2020)": 27865,
+    "Population (2015)": 27823,
+    "Annual Population Growth Rate (2015‑2020)": 0.0003,
+    "Area (2013), in km2": 104.79,
+    "Density (2020), per km2": 266,
+    "Brgy count": 28
+  },
+  {
+    "Name": "Matag-ob",
+    "Type": "municipality",
+    "Population (2020)": 17522,
+    "Population (2015)": 18373,
+    "Annual Population Growth Rate (2015‑2020)": -0.0099,
+    "Area (2013), in km2": 104.4,
+    "Density (2020), per km2": 168,
+    "Brgy count": 21
+  },
+  {
+    "Name": "Matalom",
+    "Type": "municipality",
+    "Population (2020)": 32586,
+    "Population (2015)": 33121,
+    "Annual Population Growth Rate (2015‑2020)": -0.0034,
+    "Area (2013), in km2": 132,
+    "Density (2020), per km2": 247,
+    "Brgy count": 30
+  },
+  {
+    "Name": "Mayorga",
+    "Type": "municipality",
+    "Population (2020)": 18071,
+    "Population (2015)": 17161,
+    "Annual Population Growth Rate (2015‑2020)": 0.0109,
+    "Area (2013), in km2": 42.17,
+    "Density (2020), per km2": 429,
+    "Brgy count": 16
+  },
+  {
+    "Name": "Merida",
+    "Type": "municipality",
+    "Population (2020)": 31574,
+    "Population (2015)": 29863,
+    "Annual Population Growth Rate (2015‑2020)": 0.0118,
+    "Area (2013), in km2": 95.21,
+    "Density (2020), per km2": 332,
+    "Brgy count": 22
+  },
+  {
+    "Name": "Ormoc",
+    "Type": "city (ICC)",
+    "Population (2020)": 230998,
+    "Population (2015)": 215031,
+    "Annual Population Growth Rate (2015‑2020)": 0.0152,
+    "Area (2013), in km2": 613.6,
+    "Density (2020), per km2": 376,
+    "Brgy count": 110
+  },
+  {
+    "Name": "Palo",
+    "Type": "municipality",
+    "Population (2020)": 76213,
+    "Population (2015)": 70052,
+    "Annual Population Growth Rate (2015‑2020)": 0.0179,
+    "Area (2013), in km2": 221.27,
+    "Density (2020), per km2": 344,
+    "Brgy count": 33
+  },
+  {
+    "Name": "Palompon",
+    "Type": "municipality",
+    "Population (2020)": 58313,
+    "Population (2015)": 58108,
+    "Annual Population Growth Rate (2015‑2020)": 0.0007,
+    "Area (2013), in km2": 126.07,
+    "Density (2020), per km2": 463,
+    "Brgy count": 50
+  },
+  {
+    "Name": "Pastrana",
+    "Type": "municipality",
+    "Population (2020)": 19359,
+    "Population (2015)": 18002,
+    "Annual Population Growth Rate (2015‑2020)": 0.0154,
+    "Area (2013), in km2": 86.35,
+    "Density (2020), per km2": 224,
+    "Brgy count": 29
+  },
+  {
+    "Name": "San Isidro",
+    "Type": "municipality",
+    "Population (2020)": 30722,
+    "Population (2015)": 31641,
+    "Annual Population Growth Rate (2015‑2020)": -0.0062,
+    "Area (2013), in km2": 122.5,
+    "Density (2020), per km2": 251,
+    "Brgy count": 19
+  },
+  {
+    "Name": "San Miguel",
+    "Type": "municipality",
+    "Population (2020)": 19753,
+    "Population (2015)": 19420,
+    "Annual Population Growth Rate (2015‑2020)": 0.0036,
+    "Area (2013), in km2": 145.11,
+    "Density (2020), per km2": 136,
+    "Brgy count": 21
+  },
+  {
+    "Name": "Santa Fe",
+    "Type": "municipality",
+    "Population (2020)": 22102,
+    "Population (2015)": 20439,
+    "Annual Population Growth Rate (2015‑2020)": 0.0166,
+    "Area (2013), in km2": 53.97,
+    "Density (2020), per km2": 410,
+    "Brgy count": 20
+  },
+  {
+    "Name": "Tabango",
+    "Type": "municipality",
+    "Population (2020)": 33868,
+    "Population (2015)": 34195,
+    "Annual Population Growth Rate (2015‑2020)": -0.002,
+    "Area (2013), in km2": 96.62,
+    "Density (2020), per km2": 351,
+    "Brgy count": 13
+  },
+  {
+    "Name": "Tabontabon",
+    "Type": "municipality",
+    "Population (2020)": 11902,
+    "Population (2015)": 11204,
+    "Annual Population Growth Rate (2015‑2020)": 0.0128,
+    "Area (2013), in km2": 24.18,
+    "Density (2020), per km2": 492,
+    "Brgy count": 16
+  },
+  {
+    "Name": "Tanauan",
+    "Type": "municipality",
+    "Population (2020)": 57455,
+    "Population (2015)": 55021,
+    "Annual Population Growth Rate (2015‑2020)": 0.0092,
+    "Area (2013), in km2": 78.41,
+    "Density (2020), per km2": 733,
+    "Brgy count": 54
+  },
+  {
+    "Name": "Tolosa",
+    "Type": "municipality",
+    "Population (2020)": 20708,
+    "Population (2015)": 20978,
+    "Annual Population Growth Rate (2015‑2020)": -0.0027,
+    "Area (2013), in km2": 22.54,
+    "Density (2020), per km2": 919,
+    "Brgy count": 15
+  },
+  {
+    "Name": "Tunga",
+    "Type": "municipality",
+    "Population (2020)": 7656,
+    "Population (2015)": 7584,
+    "Annual Population Growth Rate (2015‑2020)": 0.002,
+    "Area (2013), in km2": 7.7,
+    "Density (2020), per km2": 994,
+    "Brgy count": 8
+  },
+  {
+    "Name": "Villaba",
+    "Type": "municipality",
+    "Population (2020)": 42859,
+    "Population (2015)": 41891,
+    "Annual Population Growth Rate (2015‑2020)": 0.0048,
+    "Area (2013), in km2": 150.31,
+    "Density (2020), per km2": 285,
+    "Brgy count": 35
+  },
+  {
+    "Name": "Leyte Total",
+    "Type": "1,776,847",
+    "Population (2020)": 1724679,
+    "Population (2015)": 0.0063,
+    "Annual Population Growth Rate (2015‑2020)": 6335.44,
+    "Area (2013), in km2": 280,
+    "Density (2020), per km2": 1503,
+    "Brgy count": ""
+  },
+
+  {
+    "Name": "Catarman",
+    "Type": "municipality",
+    "Population (2020)": 17569,
+    "Population (2015)": 16798,
+    "Annual Population Growth Rate (2015‑2020)": 0.0095,
+    "Area (2013), in km2": 53.75,
+    "Density (2020), per km2": 327,
+    "Brgy count": 14
+  },
+  {
+    "Name": "Guinsiliban",
+    "Type": "municipality",
+    "Population (2020)": 6685,
+    "Population (2015)": 6281,
+    "Annual Population Growth Rate (2015‑2020)": 0.0132,
+    "Area (2013), in km2": 18.52,
+    "Density (2020), per km2": 361,
+    "Brgy count": 7
+  },
+  {
+    "Name": "Mahinog",
+    "Type": "municipality",
+    "Population (2020)": 14634,
+    "Population (2015)": 14038,
+    "Annual Population Growth Rate (2015‑2020)": 0.0088,
+    "Area (2013), in km2": 36.04,
+    "Density (2020), per km2": 406,
+    "Brgy count": 13
+  },
+  {
+    "Name": "Mambajao",
+    "Type": "municipality, capital",
+    "Population (2020)": 41094,
+    "Population (2015)": 38735,
+    "Annual Population Growth Rate (2015‑2020)": 0.0125,
+    "Area (2013), in km2": 89,
+    "Density (2020), per km2": 462,
+    "Brgy count": 15
+  },
+  {
+    "Name": "Sagay",
+    "Type": "municipality",
+    "Population (2020)": 12826,
+    "Population (2015)": 12626,
+    "Annual Population Growth Rate (2015‑2020)": 0.0033,
+    "Area (2013), in km2": 44.13,
+    "Density (2020), per km2": 291,
+    "Brgy count": 9
+  },
+  {
+    "Name": "Camiguin Total",
+    "Type": "92,808",
+    "Population (2020)": 88478,
+    "Population (2015)": 0.0101,
+    "Annual Population Growth Rate (2015‑2020)": 241.44,
+    "Area (2013), in km2": 384,
+    "Density (2020), per km2": 58,
+    "Brgy count": ""
+  },
+
+
+
+  {
+    "Name": "Alubijid",
+    "Type": "municipality",
+    "Population (2020)": 32163,
+    "Population (2015)": 29724,
+    "Annual Population Growth Rate (2015‑2020)": 0.0167,
+    "Area (2013), in km2": 85.56,
+    "Density (2020), per km2": 376,
+    "Brgy count": 16
+  },
+  {
+    "Name": "Balingasag",
+    "Type": "municipality",
+    "Population (2020)": 74385,
+    "Population (2015)": 67059,
+    "Annual Population Growth Rate (2015‑2020)": 0.0221,
+    "Area (2013), in km2": 147.11,
+    "Density (2020), per km2": 506,
+    "Brgy count": 30
+  },
+  {
+    "Name": "Balingoan",
+    "Type": "municipality",
+    "Population (2020)": 11020,
+    "Population (2015)": 11051,
+    "Annual Population Growth Rate (2015‑2020)": -0.0006,
+    "Area (2013), in km2": 57.8,
+    "Density (2020), per km2": 191,
+    "Brgy count": 9
+  },
+  {
+    "Name": "Binuangan",
+    "Type": "municipality",
+    "Population (2020)": 7441,
+    "Population (2015)": 7515,
+    "Annual Population Growth Rate (2015‑2020)": -0.0021,
+    "Area (2013), in km2": 30.43,
+    "Density (2020), per km2": 245,
+    "Brgy count": 8
+  },
+  {
+    "Name": "Claveria",
+    "Type": "municipality",
+    "Population (2020)": 52478,
+    "Population (2015)": 48906,
+    "Annual Population Growth Rate (2015‑2020)": 0.015,
+    "Area (2013), in km2": 579.63,
+    "Density (2020), per km2": 91,
+    "Brgy count": 24
+  },
+  {
+    "Name": "El Salvador",
+    "Type": "city (CC)",
+    "Population (2020)": 58771,
+    "Population (2015)": 50204,
+    "Annual Population Growth Rate (2015‑2020)": 0.0337,
+    "Area (2013), in km2": 106.15,
+    "Density (2020), per km2": 554,
+    "Brgy count": 15
+  },
+  {
+    "Name": "Gingoog",
+    "Type": "city (CC)",
+    "Population (2020)": 136698,
+    "Population (2015)": 124648,
+    "Annual Population Growth Rate (2015‑2020)": 0.0196,
+    "Area (2013), in km2": 568.44,
+    "Density (2020), per km2": 240,
+    "Brgy count": 79
+  },
+  {
+    "Name": "Gitagum",
+    "Type": "municipality",
+    "Population (2020)": 17920,
+    "Population (2015)": 16373,
+    "Annual Population Growth Rate (2015‑2020)": 0.0192,
+    "Area (2013), in km2": 43.4,
+    "Density (2020), per km2": 413,
+    "Brgy count": 11
+  },
+  {
+    "Name": "Initao",
+    "Type": "municipality",
+    "Population (2020)": 33902,
+    "Population (2015)": 32370,
+    "Annual Population Growth Rate (2015‑2020)": 0.0098,
+    "Area (2013), in km2": 111.27,
+    "Density (2020), per km2": 305,
+    "Brgy count": 16
+  },
+  {
+    "Name": "Jasaan",
+    "Type": "municipality",
+    "Population (2020)": 57055,
+    "Population (2015)": 54478,
+    "Annual Population Growth Rate (2015‑2020)": 0.0098,
+    "Area (2013), in km2": 77.02,
+    "Density (2020), per km2": 741,
+    "Brgy count": 15
+  },
+  {
+    "Name": "Kinoguitan",
+    "Type": "municipality",
+    "Population (2020)": 14091,
+    "Population (2015)": 14391,
+    "Annual Population Growth Rate (2015‑2020)": -0.0044,
+    "Area (2013), in km2": 42.56,
+    "Density (2020), per km2": 331,
+    "Brgy count": 15
+  },
+  {
+    "Name": "Lagonglong",
+    "Type": "municipality",
+    "Population (2020)": 24190,
+    "Population (2015)": 21659,
+    "Annual Population Growth Rate (2015‑2020)": 0.0235,
+    "Area (2013), in km2": 83.78,
+    "Density (2020), per km2": 289,
+    "Brgy count": 10
+  },
+  {
+    "Name": "Laguindingan",
+    "Type": "municipality",
+    "Population (2020)": 26363,
+    "Population (2015)": 24405,
+    "Annual Population Growth Rate (2015‑2020)": 0.0164,
+    "Area (2013), in km2": 44.23,
+    "Density (2020), per km2": 596,
+    "Brgy count": 11
+  },
+  {
+    "Name": "Libertad",
+    "Type": "municipality",
+    "Population (2020)": 12948,
+    "Population (2015)": 12354,
+    "Annual Population Growth Rate (2015‑2020)": 0.0099,
+    "Area (2013), in km2": 22.47,
+    "Density (2020), per km2": 576,
+    "Brgy count": 9
+  },
+  {
+    "Name": "Lugait",
+    "Type": "municipality",
+    "Population (2020)": 20559,
+    "Population (2015)": 19758,
+    "Annual Population Growth Rate (2015‑2020)": 0.0084,
+    "Area (2013), in km2": 27.45,
+    "Density (2020), per km2": 749,
+    "Brgy count": 8
+  },
+  {
+    "Name": "Magsaysay",
+    "Type": "municipality",
+    "Population (2020)": 36803,
+    "Population (2015)": 34605,
+    "Annual Population Growth Rate (2015‑2020)": 0.013,
+    "Area (2013), in km2": 143.14,
+    "Density (2020), per km2": 257,
+    "Brgy count": 25
+  },
+  {
+    "Name": "Manticao",
+    "Type": "municipality",
+    "Population (2020)": 29469,
+    "Population (2015)": 28422,
+    "Annual Population Growth Rate (2015‑2020)": 0.0076,
+    "Area (2013), in km2": 123.01,
+    "Density (2020), per km2": 240,
+    "Brgy count": 13
+  },
+  {
+    "Name": "Medina",
+    "Type": "municipality",
+    "Population (2020)": 35612,
+    "Population (2015)": 32907,
+    "Annual Population Growth Rate (2015‑2020)": 0.0168,
+    "Area (2013), in km2": 148.29,
+    "Density (2020), per km2": 240,
+    "Brgy count": 19
+  },
+  {
+    "Name": "Naawan",
+    "Type": "municipality",
+    "Population (2020)": 22444,
+    "Population (2015)": 21213,
+    "Annual Population Growth Rate (2015‑2020)": 0.0119,
+    "Area (2013), in km2": 88.5,
+    "Density (2020), per km2": 254,
+    "Brgy count": 10
+  },
+  {
+    "Name": "Opol",
+    "Type": "municipality",
+    "Population (2020)": 66327,
+    "Population (2015)": 61503,
+    "Annual Population Growth Rate (2015‑2020)": 0.016,
+    "Area (2013), in km2": 175.13,
+    "Density (2020), per km2": 379,
+    "Brgy count": 14
+  },
+  {
+    "Name": "Salay",
+    "Type": "municipality",
+    "Population (2020)": 29998,
+    "Population (2015)": 28705,
+    "Annual Population Growth Rate (2015‑2020)": 0.0093,
+    "Area (2013), in km2": 92.79,
+    "Density (2020), per km2": 323,
+    "Brgy count": 18
+  },
+  {
+    "Name": "Sugbongcogon",
+    "Type": "municipality",
+    "Population (2020)": 9764,
+    "Population (2015)": 9226,
+    "Annual Population Growth Rate (2015‑2020)": 0.012,
+    "Area (2013), in km2": 26.5,
+    "Density (2020), per km2": 368,
+    "Brgy count": 10
+  },
+  {
+    "Name": "Tagoloan",
+    "Type": "municipality",
+    "Population (2020)": 80319,
+    "Population (2015)": 73150,
+    "Annual Population Growth Rate (2015‑2020)": 0.0199,
+    "Area (2013), in km2": 117.73,
+    "Density (2020), per km2": 682,
+    "Brgy count": 10
+  },
+  {
+    "Name": "Talisayan",
+    "Type": "municipality",
+    "Population (2020)": 25761,
+    "Population (2015)": 24505,
+    "Annual Population Growth Rate (2015‑2020)": 0.0106,
+    "Area (2013), in km2": 140.33,
+    "Density (2020), per km2": 184,
+    "Brgy count": 18
+  },
+  {
+    "Name": "Villanueva",
+    "Type": "municipality",
+    "Population (2020)": 40419,
+    "Population (2015)": 39378,
+    "Annual Population Growth Rate (2015‑2020)": 0.0055,
+    "Area (2013), in km2": 48.8,
+    "Density (2020), per km2": 828,
+    "Brgy count": 11
+  },
+  {
+    "Name": "Misamis Oriental Total",
+    "Type": "956,900",
+    "Population (2020)": 888509,
+    "Population (2015)": 0.0157,
+    "Annual Population Growth Rate (2015‑2020)": 3131.52,
+    "Area (2013), in km2": 306,
+    "Density (2020), per km2": 424,
+    "Brgy count": ""
+  },
+
+  {
+    "Name": "Basilisa",
+    "Type": "municipality",
+    "Population (2020)": 36911,
+    "Population (2015)": 36880,
+    "Annual Population Growth Rate (2015‑2020)": 0.0002,
+    "Area (2013), in km2": 102.46,
+    "Density (2020), per km2": 360,
+    "Brgy count": 27
+  },
+  {
+    "Name": "Cagdianao",
+    "Type": "municipality",
+    "Population (2020)": 18350,
+    "Population (2015)": 16808,
+    "Annual Population Growth Rate (2015‑2020)": 0.0187,
+    "Area (2013), in km2": 196.57,
+    "Density (2020), per km2": 93,
+    "Brgy count": 14
+  },
+  {
+    "Name": "Dinagat",
+    "Type": "municipality",
+    "Population (2020)": 10621,
+    "Population (2015)": 10632,
+    "Annual Population Growth Rate (2015‑2020)": -0.0002,
+    "Area (2013), in km2": 21.36,
+    "Density (2020), per km2": 497,
+    "Brgy count": 12
+  },
+  {
+    "Name": "Libjo",
+    "Type": "municipality",
+    "Population (2020)": 18051,
+    "Population (2015)": 17760,
+    "Annual Population Growth Rate (2015‑2020)": 0.0034,
+    "Area (2013), in km2": 180.57,
+    "Density (2020), per km2": 100,
+    "Brgy count": 16
+  },
+  {
+    "Name": "Loreto",
+    "Type": "municipality",
+    "Population (2020)": 9690,
+    "Population (2015)": 9309,
+    "Annual Population Growth Rate (2015‑2020)": 0.0085,
+    "Area (2013), in km2": 155.82,
+    "Density (2020), per km2": 62,
+    "Brgy count": 10
+  },
+  {
+    "Name": "San Jose",
+    "Type": "municipality, capital",
+    "Population (2020)": 26375,
+    "Population (2015)": 27487,
+    "Annual Population Growth Rate (2015‑2020)": -0.0087,
+    "Area (2013), in km2": 34.31,
+    "Density (2020), per km2": 769,
+    "Brgy count": 12
+  },
+  {
+    "Name": "Tubajon",
+    "Type": "municipality",
+    "Population (2020)": 8119,
+    "Population (2015)": 8276,
+    "Annual Population Growth Rate (2015‑2020)": -0.004,
+    "Area (2013), in km2": 126.38,
+    "Density (2020), per km2": 64,
+    "Brgy count": 9
+  },
+  {
+    "Name": "Dinagat Islands Total",
+    "Type": "128,117",
+    "Population (2020)": 127152,
+    "Population (2015)": 0.0016,
+    "Annual Population Growth Rate (2015‑2020)": 817.47,
+    "Area (2013), in km2": 157,
+    "Density (2020), per km2": 100,
+    "Brgy count": ""
   }
 ]

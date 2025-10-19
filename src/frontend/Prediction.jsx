@@ -74,6 +74,7 @@ import * as tf from '@tensorflow/tfjs';
 import Navbar from "../components/Navbar";
 import PopulationDensityData from "../Data/PopulationDensity.json"; // Import your JSON data
 
+
 function Prediction() {
     const [selectedRegion, setSelectedRegion] = useState("");
     const [selectedCity, setSelectedCity] = useState("");
@@ -2099,6 +2100,7 @@ function Prediction() {
                     </div>
                 </div>
             </div>
+            
         </>
     );
 }

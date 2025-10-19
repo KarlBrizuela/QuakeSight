@@ -6,7 +6,9 @@ import { Button, Container, Row, Col } from 'react-bootstrap';
 import Dash from './frontend/Dashboard'; 
 import Navbar from './components/Navbar';
 import Predict from './frontend/Prediction';
-import Ab from './frontend/About';
+import About from './frontend/About';
+import Footer from './components/Footer';
+
 
 
 function App() {
@@ -17,7 +19,7 @@ function App() {
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
         <Route path="/dashboard" element={<Dash />} /> 
         <Route path="/prediction" element={<Predict/>}/>
-        <Route path="/about" elemeent={<Ab/>}/>
+        <Route path="/about" element={<About/>}/>
       </Routes>
     </Router>
   );
