@@ -24,6 +24,9 @@ function Navbar() {
                 <Link to="/prediction" className="btn btn-outline-success px-4 py-2" style={{fontSize: '18px', fontFamily: 'Poppins'}}>Risk Factor</Link>
               </li>
               <li className="nav-item">
+                <Link to="/prediction-history" className="btn btn-outline-success px-4 py-2" style={{fontSize: '18px', fontFamily: 'Poppins'}}>History</Link>
+              </li>
+              <li className="nav-item">
                 <Link to="/about" className="btn btn-outline-success px-4 py-2" style={{fontSize: '18px', fontFamily: 'Poppins'}}>About</Link>
               </li>
             </ul>

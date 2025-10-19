@@ -7,6 +7,10 @@ import Dash from './frontend/Dashboard';
 import Navbar from './components/Navbar';
 import Predict from './frontend/Prediction';
 import Ab from './frontend/About';
+import PredictionHistory from './frontend/PredictionHistory';
+// Import Firebase tests for browser console
+import './firebase/testInBrowser';
+import './firebase/simpleTest';
 
 
 function App() {
@@ -17,7 +21,9 @@ function App() {
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
         <Route path="/dashboard" element={<Dash />} /> 
         <Route path="/prediction" element={<Predict/>}/>
-        <Route path="/about" elemeent={<Ab/>}/>
+        <Route path="/prediction-history" element={<PredictionHistory/>}/>
+        <Route path="/about" element={<Ab/>}/>
+        
       </Routes>
     </Router>
   );

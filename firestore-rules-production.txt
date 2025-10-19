@@ -1,0 +1,23 @@
+// Production Firestore Security Rules
+// Use this when you deploy to production
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow public read access to earthquake predictions
+    match /earthquake_predictions/{document} {
+      allow read: if true;
+      allow write: if request.auth != null; // Require authentication for writes
+    }
+    
+    // Restrict test collection in production
+    match /test_collection/{document} {
+      allow read, write: if request.auth != null;
+    }
+    
+    // Default: deny all other access
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
