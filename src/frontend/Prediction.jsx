@@ -73,6 +73,8 @@ import React, { useState, useEffect } from "react";
 import * as tf from '@tensorflow/tfjs';
 import Navbar from "../components/Navbar";
 import PopulationDensityData from "../Data/PopulationDensity.json"; // Import your JSON data
+import { savePredictionToDatabase } from '../firebase/predictionService';
+import { testFirebaseConnection } from '../firebase/testConnection';
 
 
 function Prediction() {
@@ -81,6 +83,8 @@ function Prediction() {
     const [selectedYear, setSelectedYear] = useState("Current");
     const [prediction, setPrediction] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [saving, setSaving] = useState(false);
+    const [saveMessage, setSaveMessage] = useState(null);
     
     // Debug: Check if PopulationDensityData is loaded correctly
     useEffect(() => {
@@ -200,6 +204,11 @@ function Prediction() {
     useEffect(() => {
         debugPopulationData();
         initializeData();
+        
+        // Test Firebase connection
+        testFirebaseConnection().then(result => {
+            console.log('🔥 Firebase connection test result:', result);
+        });
     }, []);
 
     // Debug function to check JSON data
@@ -561,10 +570,26 @@ function Prediction() {
                 return result;
             }
             
-            // If we get here, no data was found
+            // If we get here, no data was found - provide fallback
             console.warn(`❌ No complete population data found for "${cityName}" after trying ${uniqueVariations.length} variations`);
+            console.log('Available city names in data:', PopulationDensityData.slice(0, 10).map(city => city["Name"]));
             
-            return null;
+            // Return fallback data based on region and city type
+            const fallbackData = {
+                cityName: cityName,
+                population2020: null,
+                populationDensity: regionName === 'National Capital Region' ? 15000 : 3000, // Estimate based on region
+                population2015: null,
+                growthRate: null,
+                area: null,
+                type: cityName.toLowerCase().includes('city') ? 'city' : 'municipality',
+                brgyCount: null,
+                dataSource: "Fallback estimate (data not found)",
+                isAccurate: false
+            };
+            
+            console.log(`⚠️ Using fallback data for ${cityName}:`, fallbackData);
+            return fallbackData;
             
         } catch (error) {
             console.error(`Error getting complete population data for ${cityName}:`, error);
@@ -805,14 +830,40 @@ function Prediction() {
             
             const currentYear = new Date().getFullYear();
             
-            // Add multiple cache busting parameters
-            const timestamp = Date.now();
-            const randomId = Math.random().toString(36).substring(7);
-            const cacheBust = `_t=${timestamp}&_r=${randomId}&_city=${encodeURIComponent(cityName)}`;
+            // Create properly formatted URLs
+            const startYear10 = Math.max(1970, currentYear - 10);
+            const endYear = currentYear;
+            
+            const recentUrl = new URL('https://earthquake.usgs.gov/fdsnws/event/1/query');
+            recentUrl.searchParams.set('format', 'geojson');
+            recentUrl.searchParams.set('starttime', `${startYear10}-01-01`);
+            recentUrl.searchParams.set('endtime', `${endYear}-12-31`);
+            recentUrl.searchParams.set('latitude', latitude.toString());
+            recentUrl.searchParams.set('longitude', longitude.toString());
+            recentUrl.searchParams.set('maxradiuskm', '150');
+            recentUrl.searchParams.set('minmagnitude', '3.5');
+            recentUrl.searchParams.set('orderby', 'time');
+            recentUrl.searchParams.set('limit', '100');
+            
+            const historicalUrl = new URL('https://earthquake.usgs.gov/fdsnws/event/1/query');
+            historicalUrl.searchParams.set('format', 'geojson');
+            historicalUrl.searchParams.set('starttime', '1970-01-01');
+            historicalUrl.searchParams.set('endtime', `${endYear}-12-31`);
+            historicalUrl.searchParams.set('latitude', latitude.toString());
+            historicalUrl.searchParams.set('longitude', longitude.toString());
+            historicalUrl.searchParams.set('maxradiuskm', '200');
+            historicalUrl.searchParams.set('minmagnitude', '5.0');
+            historicalUrl.searchParams.set('orderby', 'magnitude');
+            historicalUrl.searchParams.set('limit', '50');
+            
+            console.log('🌍 USGS URLs:', {
+                recent: recentUrl.toString(),
+                historical: historicalUrl.toString()
+            });
             
             const responses = await Promise.all([
                 // Recent 10 years - higher resolution
-                fetch(`https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=${currentYear-10}-01-01&endtime=${currentYear}-12-31&latitude=${latitude}&longitude=${longitude}&maxradiuskm=150&minmagnitude=3.5&orderby=time&limit=100&${cacheBust}`, {
+                fetch(recentUrl.toString(), {
                     cache: 'no-cache',
                     headers: {
                         'Cache-Control': 'no-cache, no-store, must-revalidate',
@@ -821,7 +872,7 @@ function Prediction() {
                     }
                 }),
                 // Historical 50 years - major events
-                fetch(`https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=1970-01-01&endtime=${currentYear}-12-31&latitude=${latitude}&longitude=${longitude}&maxradiuskm=200&minmagnitude=5.0&orderby=magnitude&limit=50&${cacheBust}`, {
+                fetch(historicalUrl.toString(), {
                     cache: 'no-cache',
                     headers: {
                         'Cache-Control': 'no-cache, no-store, must-revalidate',
@@ -833,8 +884,21 @@ function Prediction() {
             
             // Check if responses are successful
             if (!responses[0].ok || !responses[1].ok) {
-                console.warn(`⚠️ USGS API response not OK for ${cityName}`);
-                return null;
+                console.warn(`⚠️ USGS API response not OK for ${cityName}:`, {
+                    recent: { status: responses[0].status, statusText: responses[0].statusText },
+                    historical: { status: responses[1].status, statusText: responses[1].statusText }
+                });
+                
+                // Try to use fallback data or return minimal data structure
+                return {
+                    recentEarthquakes: [],
+                    historicalEarthquakes: [],
+                    maxMagnitude: 0,
+                    earthquakeCount: 0,
+                    dataSource: 'USGS (fallback due to API errors)',
+                    isLimited: true,
+                    error: `USGS API returned ${responses[0].status}/${responses[1].status}`
+                };
             }
             
             const [recentData, historicalData] = await Promise.all([
@@ -1240,9 +1304,20 @@ function Prediction() {
         try {
             console.log("📡 Fetching recent USGS data for Philippines...");
             
-            const response = await fetch(
-                `https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=${getDateString(30)}&endtime=${getDateString(0)}&latitude=12.8797&longitude=121.7740&maxradiuskm=1500&minmagnitude=4.5&orderby=magnitude&limit=20`
-            );
+            const recentUrl = new URL('https://earthquake.usgs.gov/fdsnws/event/1/query');
+            recentUrl.searchParams.set('format', 'geojson');
+            recentUrl.searchParams.set('starttime', getDateString(30));
+            recentUrl.searchParams.set('endtime', getDateString(0));
+            recentUrl.searchParams.set('latitude', '12.8797');
+            recentUrl.searchParams.set('longitude', '121.7740');
+            recentUrl.searchParams.set('maxradiuskm', '1500');
+            recentUrl.searchParams.set('minmagnitude', '4.5');
+            recentUrl.searchParams.set('orderby', 'magnitude');
+            recentUrl.searchParams.set('limit', '20');
+            
+            console.log('🌍 Recent USGS URL:', recentUrl.toString());
+            
+            const response = await fetch(recentUrl.toString());
             
             const data = await response.json();
             console.log(`✅ Loaded ${data.features?.length || 0} recent earthquakes`);
@@ -1512,6 +1587,70 @@ function Prediction() {
         return explanation;
     };
 
+    // Save prediction to database
+    const handleSavePrediction = async () => {
+        if (!prediction) {
+            setSaveMessage({ type: 'error', text: 'No prediction to save!' });
+            return;
+        }
+
+        setSaving(true);
+        setSaveMessage(null);
+
+        try {
+            console.log('🔍 Debug: About to save prediction...', {
+                hasPrediction: !!prediction,
+                hasSelectedRegion: !!selectedRegion,
+                predictionKeys: prediction ? Object.keys(prediction) : [],
+                predictionData: prediction
+            });
+
+            // Add region information to the prediction data
+            const predictionWithRegion = {
+                ...prediction,
+                city: {
+                    ...prediction.city,
+                    region: selectedRegion
+                }
+            };
+
+            console.log('🔍 Debug: Prediction data prepared:', predictionWithRegion);
+
+            console.log('🔍 Debug: Calling savePredictionToDatabase...');
+            const result = await savePredictionToDatabase(predictionWithRegion);
+            console.log('🔍 Debug: Save result:', result);
+            
+            if (result.success) {
+                setSaveMessage({ 
+                    type: 'success', 
+                    text: `✅ ${result.message} (ID: ${result.id})` 
+                });
+                
+                // Clear message after 5 seconds
+                setTimeout(() => setSaveMessage(null), 5000);
+            } else {
+                console.error('❌ Save failed with result:', result);
+                setSaveMessage({ 
+                    type: 'error', 
+                    text: `❌ ${result.message || result.error || 'Unknown error occurred'}` 
+                });
+            }
+        } catch (error) {
+            console.error('❌ Exception during save:', error);
+            console.error('❌ Error details:', {
+                message: error.message,
+                stack: error.stack,
+                name: error.name
+            });
+            setSaveMessage({ 
+                type: 'error', 
+                text: `❌ Save failed: ${error.message || 'Please check console for details'}` 
+            });
+        } finally {
+            setSaving(false);
+        }
+    };
+
     const handleCitySelect = async (cityName) => {
         setSelectedCity(cityName);
         try {
@@ -1767,9 +1906,12 @@ function Prediction() {
                                                         setLoading(false);
                                                         return;
                                                     }
+                                                    
+                                                    console.log('🏙️ Selected city data from PSGC:', selectedCityData);
 
                                                     // Fetch fresh data with forceRefresh = true to bypass all caches
-                                                    const [historicalData, faultProximityData] = await Promise.all([
+                                                    // Use Promise.allSettled to handle partial failures
+                                                    const dataResults = await Promise.allSettled([
                                                         fetchHistoricalEarthquakes(
                                                             selectedCityData.latitude,
                                                             selectedCityData.longitude,
@@ -1785,21 +1927,45 @@ function Prediction() {
                                                             true
                                                         )
                                                     ]);
+                                                    
+                                                    // Extract results with fallbacks
+                                                    const historicalData = dataResults[0].status === 'fulfilled' 
+                                                        ? dataResults[0].value 
+                                                        : { maxMagnitude: 6.0, earthquakeCount: 5, dataSource: 'Fallback (API failed)' };
+                                                    
+                                                    const faultProximityData = dataResults[1].status === 'fulfilled' 
+                                                        ? dataResults[1].value 
+                                                        : { distance: 25.0, dataSource: 'Fallback (API failed)' };
 
-                                                    // Get population density data
-                                                    const populationDensityData = getPopulationDensityFromJSON(selectedCity, selectedRegion);
+                                                    // Get complete population data (not just density)
+                                                    const completePopulationData = getCompletePopulationDataFromJSON(selectedCity, selectedRegion);
+                                                    console.log('🏙️ Complete population data:', completePopulationData);
 
                                                     // Prepare updated city data with all sources
                                                     const updatedCityData = {
                                                         ...selectedCityData,
+                                                        // Seismic data
                                                         maxMagnitude: historicalData.maxMagnitude,
                                                         historicalQuakes: historicalData.earthquakeCount,
                                                         faultProximity: faultProximityData?.distance || 25.0,
                                                         soilRiskScore: selectedCityData.soilRiskScore || 0.5,
                                                         buildingAgeScore: selectedCityData.buildingAgeScore || 0.5,
-                                                        populationDensity: populationDensityData?.populationDensity || 0,
-                                                        tsunamiRisk: selectedCityData.isCoastal ? 0.8 : 0.2
+                                                        tsunamiRisk: selectedCityData.isCoastal ? 0.8 : 0.2,
+                                                        // Population data from JSON
+                                                        populationDensity: completePopulationData?.populationDensity || selectedCityData.populationDensity || 0,
+                                                        population: completePopulationData?.population2020 || selectedCityData.population || null,
+                                                        landArea: completePopulationData?.area || selectedCityData.landArea || null,
+                                                        // Ensure we have coordinate data
+                                                        latitude: selectedCityData.latitude || null,
+                                                        longitude: selectedCityData.longitude || null,
+                                                        elevation: selectedCityData.elevation || null,
+                                                        // Additional metadata
+                                                        cityType: completePopulationData?.type || selectedCityData.type || 'unknown',
+                                                        brgyCount: completePopulationData?.brgyCount || selectedCityData.brgyCount || null,
+                                                        dataSource: completePopulationData?.dataSource || 'PSGC API'
                                                     };
+                                                    
+                                                    console.log('🔍 Final updatedCityData for prediction:', updatedCityData);
 
                                                     // Calculate years for prediction
                                                     const yearValue = selectedYear === '5 Years' ? 5 :
@@ -1825,7 +1991,10 @@ function Prediction() {
                                                     setPrediction({
                                                         ...riskAssessment,
                                                         region: selectedRegion,
-                                                        city: selectedCity,
+                                                        city: {
+                                                            name: selectedCity,
+                                                            ...updatedCityData
+                                                        },
                                                         years: selectedYear,
                                                         predictedRisk: risk,
                                                         features: features,
@@ -1841,6 +2010,24 @@ function Prediction() {
                                             }}
                                         >
                                             Predict Risk
+                                        </button>
+                                        
+                                        {/* Firebase Test Button - Moved here for quick access */}
+                                        <button
+                                            className="btn btn-warning btn-sm mt-2 w-100"
+                                            onClick={async () => {
+                                                console.log('🧪 Testing Firebase connection...');
+                                                try {
+                                                    const result = await testFirebaseConnection();
+                                                    alert(`Firebase Test: ${result.success ? 'SUCCESS ✅' : 'FAILED ❌'}\nMessage: ${result.message || result.error}`);
+                                                    console.log('🧪 Firebase test result:', result);
+                                                } catch (error) {
+                                                    console.error('🧪 Firebase test error:', error);
+                                                    alert(`Firebase Test: FAILED ❌\nError: ${error.message}`);
+                                                }
+                                            }}
+                                        >
+                                            🧪 Test Firebase Connection
                                         </button>
                                     </div>
                                 </div>
@@ -2076,6 +2263,44 @@ function Prediction() {
                                                         </small>
                                                     </div>
                                                 </div>
+                                            </div>
+
+                                            {/* Save to Database Section */}
+                                            <div className="mt-4 p-3 bg-light rounded border">
+                                                <div className="row align-items-center">
+                                                    <div className="col-md-8">
+                                                        <h6 className="mb-1">💾 Save Assessment Results</h6>
+                                                        <small className="text-muted">
+                                                            Save this earthquake risk assessment to the database for future reference and analysis.
+                                                            Includes all risk factors, scores, and recommendations.
+                                                        </small>
+                                                    </div>
+                                                    <div className="col-md-4 text-end">
+                                                        <button
+                                                            className="btn btn-success me-2"
+                                                            onClick={handleSavePrediction}
+                                                            disabled={saving || !prediction}
+                                                        >
+                                                            {saving ? (
+                                                                <>
+                                                                    <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                                                                    Saving...
+                                                                </>
+                                                            ) : (
+                                                                <>
+                                                                    💾 Save Assessment
+                                                                </>
+                                                            )}
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                
+                                                {/* Save Status Message */}
+                                                {saveMessage && (
+                                                    <div className={`alert alert-${saveMessage.type === 'success' ? 'success' : 'danger'} mt-3 mb-0`}>
+                                                        <small>{saveMessage.text}</small>
+                                                    </div>
+                                                )}
                                             </div>
                                         </div>
                                     </div>

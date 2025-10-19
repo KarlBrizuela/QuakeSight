@@ -6,9 +6,11 @@ import { Button, Container, Row, Col } from 'react-bootstrap';
 import Dash from './frontend/Dashboard'; 
 import Navbar from './components/Navbar';
 import Predict from './frontend/Prediction';
-import About from './frontend/About';
-import Footer from './components/Footer';
-
+import Ab from './frontend/About';
+import PredictionHistory from './frontend/PredictionHistory';
+// Import Firebase tests for browser console
+import './firebase/testInBrowser';
+import './firebase/simpleTest';
 
 
 function App() {
@@ -19,7 +21,9 @@ function App() {
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
         <Route path="/dashboard" element={<Dash />} /> 
         <Route path="/prediction" element={<Predict/>}/>
-        <Route path="/about" element={<About/>}/>
+        <Route path="/prediction-history" element={<PredictionHistory/>}/>
+        <Route path="/about" element={<Ab/>}/>
+        
       </Routes>
     </Router>
   );
