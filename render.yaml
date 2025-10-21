@@ -1,0 +1,29 @@
+services:
+  # Backend API
+  - type: web
+    name: quakesight-backend
+    env: python
+    region: oregon
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    healthCheckPath: /api/health
+    envVars:
+      - key: PORT
+        generateValue: true
+      - key: FLASK_ENV
+        value: production
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: ALLOWED_ORIGINS
+        value: https://quakesight.onrender.com,http://localhost:3000
+
+  # Frontend Static Site
+  - type: web
+    name: quakesight-frontend
+    env: static
+    buildCommand: npm ci && npm run build
+    staticPublishPath: ./build
+    envVars:
+      - key: REACT_APP_API_URL
+        value: https://quakesight-backend.onrender.com
