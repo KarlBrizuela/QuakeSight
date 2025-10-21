@@ -610,7 +610,7 @@ function Prediction() {
                 latitude: localityDetail.latitude,
                 longitude: localityDetail.longitude,
                 elevation: localityDetail.elevation,
-                isCoastal: await checkCoastalFromPSGC(localityDetail, regionName, locality.name)
+                isCoastal: await checkCoastalFromPSGC(localityDetail, regionName)
             };
         } catch (error) {
             console.warn(`Failed to get PSGC data for ${locality.name}:`, error);
@@ -620,111 +620,22 @@ function Prediction() {
                 latitude: null,
                 longitude: null,
                 elevation: null,
-                isCoastal: await checkCoastalFromPSGC({name: locality.name}, regionName, locality.name)
+                isCoastal: false
             };
         }
     };
 
-    // Comprehensive hardcoded coastal and inland cities database
-    // Based on official Philippine geographic data and NAMRIA coastal classifications
-    const COASTAL_INLAND_DATABASE = {
-        'National Capital Region': {
-            coastal: ['Manila', 'Pasay', 'Parañaque', 'Las Piñas', 'Navotas', 'Malabon'],
-            inland: ['Quezon City', 'Caloocan', 'Makati', 'Mandaluyong', 'Pasig', 'Taguig', 'Marikina', 'Muntinlupa', 'San Juan', 'Pateros', 'Valenzuela']
-        },
-        'CAR': {
-            coastal: [],
-            inland: ['Baguio', 'Tabuk', 'Bontoc', 'Lagawe', 'Bangued', 'La Trinidad', 'Buguias', 'Mankayan', 'Itogon', 'Tuba', 'Sablan']
-        },
-        'Region I': {
-            coastal: ['Alaminos', 'Dagupan', 'San Fernando', 'Vigan', 'Laoag', 'Batac', 'Candon', 'Urdaneta', 'Bolinao', 'Infanta', 'Dasol', 'Burgos', 'Luna', 'San Juan', 'Bacnotan', 'Bauang', 'San Fernando', 'Agoo', 'Caba', 'Aringay', 'Santo Tomas', 'Rosario', 'Tubao', 'Pugo', 'San Gabriel', 'Santol', 'Bangar', 'Balaoan', 'Badoc', 'Pinili', 'Currimao', 'Paoay', 'Pasuquin', 'Vintar', 'Bacarra', 'Bangui', 'Burgos', 'Dumalneg', 'Pagudpud'],
-            inland: ['Urdaneta', 'Tayug', 'Baguio', 'Rosales', 'San Carlos', 'Bontoc', 'Tagudin']
-        },
-        'Region II': {
-            coastal: ['Tuguegarao', 'Aparri', 'Gonzaga', 'Santa Ana', 'Claveria', 'Sanchez-Mira', 'Pamplona', 'Abulug', 'Ballesteros', 'Buguey', 'Calayan', 'Lal-lo', 'Gattaran', 'Baggao', 'Alcala', 'Amulung', 'Tuao', 'Piat', 'Rizal', 'Santo Niño', 'Casiguran', 'Dinalungan', 'Dipaculao', 'Maria Aurora', 'Baler', 'San Luis', 'Dilasag', 'Dinapigue', 'Maconacon', 'Palanan', 'Divilacan', 'Tumauini'],
-            inland: ['Ilagan', 'Cauayan', 'Santiago', 'Bayombong', 'Solano', 'Bambang', 'Bagabag']
-        },
-        'Region III': {
-            coastal: ['Olongapo', 'Subic', 'San Antonio', 'San Narciso', 'San Felipe', 'Cabangan', 'Botolan', 'Iba', 'Palauig', 'Masinloc', 'Candelaria', 'Santa Cruz', 'Infanta', 'Alaminos', 'Bay', 'Binangonan', 'Cardona', 'Pililla'],
-            inland: ['Angeles', 'San Fernando', 'Mabalacat', 'Tarlac', 'Cabanatuan', 'Gapan', 'San Jose', 'Palayan', 'Balanga', 'Malolos', 'Meycauayan', 'San Jose del Monte', 'Marilao', 'Bocaue', 'Bulacan', 'Calumpit', 'Guiguinto', 'Hagonoy', 'Malolos', 'Obando', 'Pandi', 'Paombong', 'Plaridel', 'Pulilan', 'Santa Maria']
-        },
-        'Region IV-A': {
-            coastal: ['Batangas', 'Lipa', 'Tanauan', 'Lemery', 'Taal', 'Balayan', 'Nasugbu', 'Calatagan', 'Mabini', 'Tingloy', 'San Juan', 'Lobo', 'San Luis', 'Bauan', 'Mabini', 'Tingloy', 'Verde Island', 'Lucena', 'Tayabas', 'Sariaya', 'Tiaong', 'Candelaria', 'Pagbilao', 'Padre Burgos', 'Atimonan', 'Gumaca', 'Lopez', 'Calauag', 'Tagkawayan', 'Guinayangan', 'Buenavista', 'San Francisco', 'San Andres', 'San Narciso', 'Mulanay', 'General Luna', 'Bacoor', 'Cavite', 'Kawit', 'Noveleta', 'Rosario', 'Tanza', 'Naic', 'Maragondon', 'Ternate'],
-            inland: ['Antipolo', 'Biñan', 'Cabuyao', 'Calamba', 'San Pedro', 'Santa Rosa', 'Tagaytay', 'Trece Martires', 'Dasmariñas', 'Imus', 'General Trias', 'Silang', 'Indang', 'Mendez', 'Alfonso', 'Amadeo']
-        },
-        'Region IV-B': {
-            coastal: ['Puerto Princesa', 'Coron', 'Busuanga', 'Culion', 'Linapacan', 'Taytay', 'El Nido', 'San Vicente', 'Roxas', 'Dumaran', 'Araceli', 'Cagayancillo', 'Agutaya', 'Magsaysay', 'Cuyo', 'Boac', 'Mogpog', 'Gasan', 'Buenavista', 'Torrijos', 'Santa Cruz', 'Calapan', 'Naujan', 'Pola', 'Pinamalayan', 'Gloria', 'Bansud', 'Bongabong', 'Roxas', 'Mansalay', 'Bulalacao', 'Romblon', 'Odiongan', 'San Jose', 'Looc', 'Santa Fe', 'Alcantara', 'Banton', 'Corcuera', 'Concepcion', 'San Agustin', 'San Andres', 'Ferrol', 'Cajidiocan', 'Magdiwang', 'San Fernando', 'Calatrava', 'Mamburao', 'Paluan', 'Abra de Ilog', 'Wawa', 'Calintaan', 'Rizal', 'Sablayan', 'Santa Cruz', 'Lubang', 'Looc', 'Tilik'],
-            inland: ['San Jose', 'Sablayan']
-        },
-        'Region V': {
-            coastal: ['Naga', 'Iriga', 'Legazpi', 'Tabaco', 'Ligao', 'Polangui', 'Libon', 'Oas', 'Guinobatan', 'Camalig', 'Daraga', 'Manito', 'Rapu-Rapu', 'Bacacay', 'Malinao', 'Tiwi', 'Malilipot', 'Santo Domingo', 'Bula', 'Baao', 'Nabua', 'Calabanga', 'Bombon', 'Magarao', 'Canaman', 'Camaligan', 'Gainza', 'Pili', 'Ocampo', 'Siruma', 'Tinambac', 'Goa', 'San Jose', 'Lagonoy', 'Tigaon', 'Sagñay', 'Caramoan', 'Presentacion', 'San Andres', 'Sorsogon', 'Bulan', 'Barcelona', 'Casiguran', 'Castilla', 'Donsol', 'Pilar', 'Prieto Diaz', 'Gubat', 'Matnog', 'Santa Magdalena', 'Bulusan', 'Irosin', 'Juban', 'Magallanes', 'Masbate', 'Mobo', 'Aroroy', 'Baleno', 'Balud', 'Batuan', 'Cataingan', 'Cawayan', 'Claveria', 'Dimasalang', 'Esperanza', 'Mandaon', 'Milagros', 'Palanas', 'Pio V. Corpuz', 'Placer', 'San Fernando', 'San Jacinto', 'San Pascual', 'Uson', 'Virac', 'Bato', 'Baras', 'Viga', 'Gigmoto', 'Pandan', 'Bagamanoc', 'Panganiban', 'Caramoran', 'San Miguel', 'San Andres'],
-            inland: ['Pili']
-        },
-        'Region VI': {
-            coastal: ['Iloilo', 'Bacolod', 'Roxas', 'Kalibo', 'San Jose de Buenavista', 'Passi', 'Cadiz', 'Sagay', 'Silay', 'Talisay', 'Bago', 'La Carlota', 'Victorias', 'Escalante', 'Toboso', 'Calatrava', 'San Carlos', 'Dumangas', 'Zarraga', 'Pototan', 'Mina', 'Barotac Nuevo', 'Anilao', 'Banate', 'Barotac Viejo', 'Ajuy', 'Sara', 'Lemery', 'San Dionisio', 'Batad', 'Estancia', 'Balasan', 'Carles', 'Concepcion', 'San Rafael', 'Guimbal', 'Miagao', 'San Joaquin', 'Tigbauan', 'Oton', 'Leganes', 'New Lucena', 'Alimodian', 'Leon', 'Tubungan', 'Igbaras', 'Antique', 'Bugasong', 'Patnongon', 'Hamtic', 'Belison', 'Pandan', 'Sebaste', 'Culasi', 'Tibiao', 'Barbaza', 'Laua-an', 'Caluya'],
-            inland: ['Kabankalan', 'Himamaylan', 'Sipalay']
-        },
-        'Region VII': {
-            coastal: ['Cebu City', 'Mandaue', 'Lapu-Lapu', 'Talisay', 'Naga', 'Carcar', 'Toledo', 'Bogo', 'Danao', 'Dumaguete', 'Bais', 'Canlaon', 'Guihulngan', 'Tanjay', 'Bayawan', 'Tagbilaran', 'Ubay', 'Talibon', 'Trinidad', 'Jagna', 'Garcia Hernandez', 'Loon', 'Calape', 'Tubigon', 'Clarin', 'Inabanga', 'Buenavista', 'Getafe', 'Talibon', 'San Miguel', 'Bien Unido', 'Presidente Carlos P. Garcia', 'Medellin', 'Daanbantayan', 'Santa Fe', 'Bantayan', 'Madridejos', 'Tabogon', 'Borbon', 'Sogod', 'Catmon', 'Carmen', 'Asturias', 'Balamban', 'Pinamungajan', 'Aloguinsan', 'Barili', 'Dumanjug', 'Ronda', 'Alcantara', 'Moalboal', 'Badian', 'Alegria', 'Malabuyoc', 'Ginatilan', 'Samboan', 'Santander', 'Oslob', 'Dalaguete', 'Argao', 'Sibonga', 'Alcoy', 'Boljoon', 'Cordova', 'Liloan', 'Compostela', 'Consolacion'],
-            inland: ['Minglanilla', 'San Fernando', 'Sibonga']
-        },
-        'Region VIII': {
-            coastal: ['Tacloban', 'Ormoc', 'Calbayog', 'Catbalogan', 'Borongan', 'Baybay', 'Maasin', 'Naval', 'Biliran', 'Caibiran', 'Culaba', 'Kawayan', 'Maripipi', 'Almeria', 'Cabucgayan', 'Calubian', 'Leyte', 'San Isidro', 'Tabango', 'Villaba', 'Matag-ob', 'Palompon', 'Merida', 'Isabel', 'Kananga', 'Capoocan', 'Carigara', 'Babatngon', 'San Miguel', 'Tunga', 'Pastrana', 'Santa Fe', 'Albuera', 'Burauen', 'La Paz', 'MacArthur', 'Mayorga', 'Palo', 'Tanauan', 'Tolosa', 'Dulag', 'Julita', 'Abuyog', 'Mahaplag', 'Silago', 'Hinunangan', 'Hinundayan', 'San Juan', 'San Francisco', 'Liloan', 'Padre Burgos', 'Sogod', 'Bontoc', 'Tomas Oppus', 'Malitbog', 'Macrohon', 'Guiuan', 'Mercedes', 'Quinapondan', 'Salcedo', 'General MacArthur', 'Giporlos', 'Lawaan', 'Balangiga', 'Llorente', 'Hernani', 'Balangkayan', 'Maydolong', 'San Julian', 'Sulat', 'San Policarpo', 'Arteche', 'Oras', 'Dolores', 'Can-avid', 'Taft', 'Jipapad', 'Maslog', 'Guiuan', 'Homonhon', 'Manicani', 'Suluan', 'Tubabao', 'Zumarraga', 'Daram', 'Calbiga', 'Hinabangan', 'Paranas', 'San Jorge', 'Jiabong', 'Motiong', 'Pinabacdao', 'San Sebastian', 'Talalora', 'Tarangnan', 'Villareal', 'Basey', 'Marabut', 'Santa Rita', 'Sulat', 'Gandara', 'San Jose de Buan', 'Santa Margarita', 'Pagsanghan', 'Santo Niño', 'Almagro', 'Tagapul-an', 'San Antonio', 'Zumarraga', 'Daram', 'Wright', 'Pambujan', 'Las Navas', 'Mapanas', 'Gamay', 'Lapinig', 'Lope de Vega', 'Silvino Lobos', 'San Isidro', 'Mondragon', 'Palapag', 'Laoang', 'Mapanas', 'Catubig', 'Bobon', 'Catarman', 'Allen', 'Biri', 'Capul', 'Lavezares', 'Rosario', 'San Antonio', 'San Isidro', 'San Jose', 'San Roque', 'San Vicente', 'Victoria'],
-            inland: ['Dagami', 'Jaro', 'Tunga', 'Matalom', 'Bato', 'Hilongos', 'Hindang', 'Inopacan', 'Paranas']
-        },
-        'Region IX': {
-            coastal: ['Zamboanga', 'Dipolog', 'Dapitan', 'Pagadian', 'Isabela', 'Sindangan', 'Liloy', 'Siayan', 'Rizal', 'Sergio Osmeña Sr.', 'Baliguian', 'Godod', 'Bacungan', 'Kalawit', 'Labason', 'Gutalac', 'Siocon', 'Sibutad', 'Jose Dalman', 'Manukan', 'Katipunan', 'Polanco', 'Piñan', 'Mutia', 'La Libertad', 'Tampilisan', 'Titay', 'Ipil', 'Tungawan', 'Naga', 'Kabasalan', 'Diplahan', 'Buug', 'Imelda', 'Alicia', 'Olutanga', 'Payao', 'Talusan', 'Titay', 'Sirawai', 'Siocon', 'Sibuco'],
-            inland: ['Ozamiz', 'Oroquieta', 'Tangub', 'Molave', 'Dumingag', 'Mahayag', 'Vincenzo Sagun', 'Labangan', 'Guipos', 'Tigbao', 'Sominot', 'Aurora', 'Bayog', 'Lakewood', 'Midsalip']
-        },
-        'Region X': {
-            coastal: ['Cagayan de Oro', 'Iligan', 'Gingoog', 'Medina', 'Gitagum', 'Naawan', 'Tagoloan', 'Villanueva', 'Jasaan', 'Claveria', 'Balingoan', 'Binuangan', 'Lugait', 'Laguindingan', 'Opol', 'El Salvador', 'Alubijid', 'Laguindingan', 'Initao', 'Libertad', 'Manticao', 'Salay', 'Binuangan', 'Magsaysay', 'Balingasag', 'Kinoguitan', 'Talisayan', 'Bacolod', 'Sugbongcogon', 'Lagonglong', 'Jimenez', 'Sinacaban', 'Oroquieta', 'Ozamiz', 'Tangub', 'Tudela', 'Clarin', 'Baliangao', 'Plaridel', 'Sapang Dalaga', 'Don Victoriano', 'Aloran', 'Panaon', 'Lopez Jaena'],
-            inland: ['Valencia', 'Malaybalay', 'Manolo Fortich', 'Baungon', 'Libona', 'Malitbog', 'Sumilao', 'Lantapan', 'Talakag', 'Impasugong', 'Cabanglasan', 'Quezon', 'Don Carlos', 'Kitaotao', 'Dangcagan', 'Kibawe', 'Damulog', 'Kadingilan', 'Kalilangan', 'Pangantucan']
-        },
-        'Region XI': {
-            coastal: ['Davao', 'Tagum', 'Panabo', 'Samal', 'Mati', 'Digos', 'Malita', 'Santa Cruz', 'Padada', 'Hagonoy', 'Sulop', 'Kiblawan', 'Matanao', 'Bansalan', 'Magsaysay', 'Lupon', 'Banaybanay', 'Governor Generoso', 'Tarragona', 'Baganga', 'Caraga', 'Manay', 'Boston', 'Cateel', 'San Isidro', 'Samal', 'Kaputian', 'Babak'],
-            inland: ['Maco', 'Montevista', 'Nabunturan', 'Compostela', 'Monkayo', 'New Bataan', 'Pantukan', 'Laak', 'Maragusan', 'Braulio E. Dujali', 'Carmen', 'Kapalong', 'New Corella', 'San Isidro', 'Santo Tomas', 'Talaingod', 'Asuncion', 'Kapalong', 'New Corella', 'San Isidro', 'Santo Tomas', 'Talaingod']
-        },
-        'Region XII': {
-            coastal: ['General Santos', 'Sarangani', 'Alabel', 'Malapatan', 'Glan', 'Maasim', 'Kiamba', 'Maitum', 'Malungon'],
-            inland: ['Koronadal', 'Tacurong', 'Kidapawan', 'Cotabato', 'Isulan', 'Tacurong', 'Esperanza', 'Bagumbayan', 'Lebak', 'Kalamansig', 'Palimbang', 'President Quirino', 'Sultan Kudarat', 'Columbio', 'Lambayong', 'Lutayan', 'Senator Ninoy Aquino', 'Tulunan', 'Makilala', 'M\'lang', 'Antipas', 'Arakan', 'President Roxas', 'Magpet', 'Matalam', 'Midsayap', 'Aleosan', 'Pigcawayan', 'Pikit', 'Kabacan', 'Carmen', 'Banisilan', 'Alamada']
-        },
-        'Region XIII': {
-            coastal: ['Butuan', 'Cabadbaran', 'Bayugan', 'Surigao', 'Tandag', 'Bislig', 'Dapa', 'San Jose', 'Del Carmen', 'Pilar', 'Placer', 'Gigaquit', 'Bacuag', 'Claver', 'Carrascal', 'Cantilan', 'Madrid', 'Carmen', 'Lanuza', 'Cortes', 'Barobo', 'Lianga', 'Tago', 'Cagwait', 'Bayabas', 'Marihatag', 'San Agustin', 'San Miguel', 'Hinatuan', 'Tagbina', 'Lingig', 'Bislig', 'Barobo', 'Lianga', 'Dinagat', 'Basilisa', 'Cagdianao', 'Dinagat', 'Libjo', 'Loreto', 'San Jose', 'Tubajon'],
-            inland: ['Prosperidad', 'Trento', 'Veruela', 'Sibagat', 'La Paz', 'Bunawan', 'Rosario', 'Santa Josefa', 'Talacogon', 'San Francisco', 'Buenavista', 'Nasipit', 'Santiago', 'Jabonga', 'Kitcharao', 'Las Nieves', 'Magallanes', 'Tubay', 'Remedios T. Romualdez', 'San Benito']
-        },
-        'BARMM': {
-            coastal: ['Cotabato City', 'Lamitan', 'Isabela City', 'Jolo', 'Bongao', 'Siasi', 'Sitangkai', 'Panglima Sugala', 'Languyan', 'Mapun', 'Turtle Islands', 'Hadji Panglima Tahil', 'Simunul', 'Tandubas', 'Sapa-Sapa', 'Pata', 'Tabawan', 'Tapul', 'Luuk', 'Kalingalan Caluang', 'Hadji Mohammad Ajul', 'Old Panamao', 'Omar', 'Panglima Estino', 'Tongkil', 'Parang', 'Lugus', 'Pandami', 'Talipao', 'Indanan', 'Maimbung', 'Patikul', 'Tipo-Tipo', 'Tuburan', 'Kalinggalang Caluang', 'Panglima Tahil', 'Balabagan', 'Datu Blah Sinsuat', 'Matanog', 'Barira', 'Sultan Kudarat', 'Sultan Mastura', 'Kabuntalan', 'Parang', 'Matanog', 'Datu Odin Sinsuat', 'Datu Abdullah Sangki', 'Mangudadatu', 'Rajah Buayan', 'Datu Salibo', 'Datu Hoffer Ampatuan', 'Shariff Aguak', 'Talayan', 'South Upi', 'Mamasapano', 'Sultan sa Barongis', 'Shariff Saydona Mustapha'],
-            inland: ['Marawi', 'Tubaran', 'Malabang', 'Wao', 'Butig', 'Lumbayanague', 'Bumbaran', 'Kapai', 'Saguiaran', 'Marogong', 'Calanogas', 'Buadiposo-Buntong', 'Maguing', 'Picong', 'Lumba-Bayabao', 'Poona Bayabao', 'Bacolod-Kalawi', 'Kapatagan', 'Sultan Gumander', 'Lumbatan', 'Amai Manabilang']
-        }
-    };
-
-    // Check if location is coastal using comprehensive hardcoded database
-    const checkCoastalFromPSGC = async (localityData, regionName, fallbackName = null) => {
-        // Try multiple possible property names for the city name
-        const cityName = localityData.name || localityData.cityName || localityData.municipalityName || fallbackName;
+    // Check if location is coastal using PSGC coordinates
+    const checkCoastalFromPSGC = async (localityData, regionName) => {
+        if (!localityData.latitude || !localityData.longitude) return false;
         
-        if (!cityName) {
-            console.warn(`⚠️ No city name found in localityData:`, localityData);
-            return false;
-        }
+        // Simple coastal determination based on known coastal regions and coordinates
+        const coastalRegions = ['National Capital Region', 'Region IV-A', 'Region V', 'Region VI', 'Region VII', 'Region VIII'];
+        const isCoastalRegion = coastalRegions.includes(regionName);
         
-        const regionData = COASTAL_INLAND_DATABASE[regionName];
-        
-        if (!regionData) {
-            console.warn(`⚠️ Region "${regionName}" not found in coastal database, defaulting to inland`);
-            return false;
-        }
-        
-        // Check if city is in coastal list
-        const isCoastal = regionData.coastal.some(coastal => 
-            cityName.toLowerCase().includes(coastal.toLowerCase()) || 
-            coastal.toLowerCase().includes(cityName.toLowerCase())
-        );
-        
-        // Log the determination for debugging
-        console.log(`🌊 Coastal Check: "${cityName}" in "${regionName}" = ${isCoastal ? 'COASTAL ✅' : 'INLAND ❌'}`);
-        
-        return isCoastal;
+        // Additional check based on latitude (coastal areas in Philippines)
+        const lat = parseFloat(localityData.latitude);
+        return isCoastalRegion || (lat < 14.0 && lat > 12.0);
     };
 
     // Process individual locality data
@@ -732,8 +643,6 @@ function Prediction() {
         try {
             // Get PSGC data
             const psgcData = await getPSGCData(locality, regionName);
-            
-            console.log(`📍 Processing locality: ${locality.name}, isCoastal from PSGC: ${psgcData.isCoastal}`);
             
             // Get population density from JSON
             const populationDensityData = getPopulationDensityFromJSON(locality.name, regionName);
@@ -1955,27 +1864,25 @@ function Prediction() {
                                             </small>
                                         )}
                                     </div>
-                                        <div className="col-md-4">
-                                            <label className="form-label">Select City/Municipality</label>
-                                            <select
-                                                className="form-select"
-                                                value={selectedCity}
-                                                onChange={(e) => handleCitySelect(e.target.value)}
-                                                disabled={!selectedRegion || loadingData || !philippineRegions}
-                                            >
-                                                <option value="">Select City/Municipality</option>
-                                                {selectedRegion && philippineRegions && philippineRegions[selectedRegion]
-                                                    ?.sort((a, b) => a.name.localeCompare(b.name))
-                                                    .map(city => (
-                                                        <option key={city.name} value={city.name}>{city.name}</option>
-                                                    ))}
-                                            </select>
-                                            {selectedRegion && (
-                                                <small className="text-muted">
-                                                    Select any locality from {selectedRegion} for risk assessment
-                                                </small>
-                                            )}
-                                        </div>
+                                    <div className="col-md-4">
+                                        <label className="form-label">Select City/Municipality</label>
+                                        <select
+                                            className="form-select"
+                                            value={selectedCity}
+                                            onChange={(e) => handleCitySelect(e.target.value)}
+                                            disabled={!selectedRegion || loadingData || !philippineRegions}
+                                        >
+                                            <option value="">Select City/Municipality</option>
+                                            {selectedRegion && philippineRegions && philippineRegions[selectedRegion]?.map(city => (
+                                                <option key={city.name} value={city.name}>{city.name}</option>
+                                            ))}
+                                        </select>
+                                        {selectedRegion && (
+                                            <small className="text-muted">
+                                                Select any locality from {selectedRegion} for risk assessment
+                                            </small>
+                                        )}
+                                    </div>
                                     <div className="col-md-4">
                                         <label className="form-label">Years</label>
                                         <select
