@@ -1,0 +1,8 @@
+flask==3.0.0
+flask-cors==4.0.0
+xgboost==2.1.1
+numpy==1.26.4
+pandas==2.2.2
+scikit-learn==1.5.1
+python-dotenv==1.0.0
+gunicorn==21.2.0
