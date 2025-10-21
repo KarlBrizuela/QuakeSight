@@ -684,7 +684,7 @@ function Prediction() {
                 populationDataSource: populationDensityData?.dataSource || "Data not available",
                 isAccuratePopulationData: populationDensityData?.isAccurate || false,
                 lastUpdated: new Date().toISOString(),
-                dataSource: "PSGC + PopulationDensity.json + USGS + PHIVOLCS APIs"
+                dataSource: "PSGC + PhilAtlas + USGS + PHIVOLCS APIs"
             };
         } catch (error) {
             console.warn(`Failed to process locality ${locality.name}:`, error);
@@ -1816,9 +1816,9 @@ function Prediction() {
                                 <div className="alert alert-info">
                                     <h6>🔬 Data Sources & Methodology</h6>
                                     <p className="mb-1"><strong>PSGC API:</strong> Official Philippine geographical data for all regions and cities</p>
-                                    <p className="mb-1"><strong>PopulationDensity.json:</strong> Actual 2020 population density data from official sources</p>
+                                    <p className="mb-1"><strong>PhilAtlas:</strong> Actual 2020 population density data from official sources</p>
                                     <p className="mb-1"><strong>USGS API:</strong> Real-time and historical earthquake data (1970-present)</p>
-                                    <p className="mb-0"><strong>All data sourced from real APIs and datasets - no hardcoded values</strong></p>
+                                    <p className="mb-0"><strong>All data sourced from real APIs and datasets </strong></p>
                                 </div>
 
                                 {usgsData && (

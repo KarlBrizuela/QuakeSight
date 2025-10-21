@@ -117,7 +117,7 @@ function About() {
                   <i className="fas fa-check-circle me-1"></i> Easy to Use
                 </span>
                 <span className="badge bg-light text-primary fs-6 p-2">
-                  <i className="fas fa-check-circle me-1"></i> Always Updated
+                  <i className="fas fa-check-circle me-1"></i>Updated
                 </span>
               </div>
             </div>
