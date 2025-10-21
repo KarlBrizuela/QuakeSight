@@ -4,9 +4,8 @@ services:
     name: quakesight-backend
     env: python
     region: oregon
-    rootDir: backend
-    buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn app:app
+    buildCommand: cd backend && pip install -r requirements.txt
+    startCommand: cd backend && gunicorn app:app
     healthCheckPath: /api/health
     envVars:
       - key: PORT
