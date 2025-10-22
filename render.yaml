@@ -13,6 +13,6 @@ services:
       - key: FLASK_ENV
         value: production
       - key: PYTHON_VERSION
-        value: 3.11.0
+        value: 3.11.9
       - key: ALLOWED_ORIGINS
         value: https://quake-sight-beryl.vercel.app,http://localhost:3000
